@@ -1,0 +1,65 @@
+[
+  {
+    "firstName": "Pierre",
+    "username": "pierre123",
+    "region": "Île-de-France"
+  },
+  {
+    "firstName": "Marie",
+    "lastName": "Dupont",
+    "username": "marie.dupont",
+    "phone": "0612345678",
+    "region": "Bretagne"
+  },
+  {
+    "firstName": "Jean",
+    "username": "jeanpierre",
+    "birthDate": "1990-02-15",
+    "region": "Auvergne-Rhône-Alpes"
+  },
+  {
+    "firstName": "Sophie",
+    "lastName": "Martin",
+    "username": "sophie.martin",
+    "phone": "0623456789",
+    "birthDate": "1985-10-20",
+    "region": "Occitanie"
+  },
+  {
+    "firstName": "Luc",
+    "username": "luc.lucas",
+    "region": "Grand Est"
+  },
+  {
+    "firstName": "Alice",
+    "lastName": "Lefebvre",
+    "username": "alice.lefebvre",
+    "region": "Normandie"
+  },
+  {
+    "firstName": "Thomas",
+    "username": "thomas.thomas",
+    "phone": "0634567890",
+    "region": "Pays de la Loire"
+  },
+  {
+    "firstName": "Léa",
+    "lastName": "Garcia",
+    "username": "lea.garcia",
+    "birthDate": "1995-05-01",
+    "region": "Provence-Alpes-Côte d'Azur"
+  },
+  {
+    "firstName": "Alexandre",
+    "username": "alexandre.alex",
+    "region": "Corse"
+  },
+  {
+    "firstName": "Charlotte",
+    "lastName": "Roux",
+    "username": "charlotte.roux",
+    "phone": "0645678901",
+    "birthDate": "1980-08-12",
+    "region": "Nouvelle-Aquitaine"
+  }
+]
