@@ -2,64 +2,82 @@
   {
     "firstName": "Pierre",
     "username": "pierre123",
-    "region": "Île-de-France"
+    "region": "Île-de-France",
+    "mail": "pierre123@example.com"
   },
   {
     "firstName": "Marie",
     "lastName": "Dupont",
     "username": "marie.dupont",
     "phone": "0612345678",
-    "region": "Bretagne"
+    "region": "Bretagne",
+    "mail": "marie.dupont@example.com"
   },
   {
     "firstName": "Jean",
     "username": "jeanpierre",
-    "birthDate": "1990-02-15",
-    "region": "Auvergne-Rhône-Alpes"
+    "age": 19,
+    "region": "Auvergne-Rhône-Alpes",
+    "mail": "jean.jeanpierre@example.com"
   },
   {
     "firstName": "Sophie",
     "lastName": "Martin",
     "username": "sophie.martin",
     "phone": "0623456789",
-    "birthDate": "1985-10-20",
-    "region": "Occitanie"
+    "age": 43,
+    "region": "Occitanie",
+    "mail": "sophie.martin@example.com"
   },
   {
     "firstName": "Luc",
     "username": "luc.lucas",
-    "region": "Grand Est"
+    "region": "Grand Est",
+    "mail": "luc.lucas@example.com"
   },
   {
     "firstName": "Alice",
     "lastName": "Lefebvre",
     "username": "alice.lefebvre",
-    "region": "Normandie"
+    "region": "Normandie",
+    "mail": "alice.lefebvre@example.com"
   },
   {
     "firstName": "Thomas",
     "username": "thomas.thomas",
     "phone": "0634567890",
-    "region": "Pays de la Loire"
+    "region": "Pays de la Loire",
+    "mail": "thomas.thomas@example.com"
   },
   {
     "firstName": "Léa",
     "lastName": "Garcia",
     "username": "lea.garcia",
-    "birthDate": "1995-05-01",
-    "region": "Provence-Alpes-Côte d'Azur"
+    "age": 32,
+    "region": "Provence-Alpes-Côte d'Azur",
+    "mail": "lea.garcia@example.com"
   },
   {
     "firstName": "Alexandre",
     "username": "alexandre.alex",
-    "region": "Corse"
+    "region": "Corse",
+    "mail": "alexandre.alex@example.com"
   },
   {
     "firstName": "Charlotte",
     "lastName": "Roux",
     "username": "charlotte.roux",
     "phone": "0645678901",
-    "birthDate": "1980-08-12",
-    "region": "Nouvelle-Aquitaine"
+    "age": 43,
+    "region": "Nouvelle-Aquitaine",
+    "mail": "charlotte.roux@example.com"
+  },
+  {
+    "firstName": "Tamère",
+    "lastName": "Lapute",
+    "username": "tamere.lapute",
+    "region": "Normandie",
+    "phone": "0656785687",
+    "mail": "tamere.lapute@example.com"
   }
 ]
