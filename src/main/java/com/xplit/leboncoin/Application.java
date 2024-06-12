@@ -9,11 +9,14 @@ public class Application {
     public static void main(String[] args) {
         try {
             List<User> users = DataInitializer.readUsersFromFile("src/main/resources/users.json");
+
+            List<Ad> ads = DataInitializer.readAdsFromFile("src/main/resources/ads.json", users);
+
             System.out.println("Je liste les users :");
             for (User user : users) {
                 System.out.println((user.toString()));
             }
-            List<Ad> ads = DataInitializer.readAdsFromFile("src/main/resources/ads.json", users);
+
             System.out.println("Je liste les annonces :");
             for (Ad ad : ads) {
                 System.out.println((ad.toString()));

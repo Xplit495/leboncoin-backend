@@ -1,5 +1,10 @@
 package com.xplit.leboncoin.model;
 
+import com.xplit.leboncoin.util.InvalidAdInformations;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -34,7 +39,6 @@ public class Ad {
             "Jardin",
             "Informatique",
             "Electroménager",
-
     };
 
     //Getter and Setter
@@ -113,6 +117,94 @@ public class Ad {
                 "\nCategory: " + this.category +
                 "\nPublicationDate: " + this.publicationDate +
                 "}\n";
+    }
+
+    //Validation methods
+    public void isValidAd() throws InvalidAdInformations {
+        isValidTitle();
+        isValidDescription();
+        isValidPictures();
+        isValidPrice();
+        isValidRegion();
+        isValidCategory();
+        isValidPublicationDate();
+    }
+
+    private void isValidTitle() {
+        String adTitle = this.getTitle();
+        if (adTitle == null || adTitle.isEmpty()) {
+            throw new InvalidAdInformations("title");
+        }
+    }
+
+    private void isValidDescription() {
+        String adDescription = this.getDescription();
+        if (adDescription == null || adDescription.isEmpty()) {
+            throw new InvalidAdInformations("description");
+        }
+    }
+
+    private void isValidPictures() {
+        String[] adPictures = this.getPictures();
+        if (adPictures != null && adPictures.length > 0) {
+            for (String adPicture : adPictures) {
+                if (!adPicture.startsWith("image")) {
+                    throw new InvalidAdInformations("pictures");
+                }
+            }
+        }else {
+            throw new InvalidAdInformations("pictures");
+        }
+    }
+
+    private void isValidPrice() {
+        Integer adPrice = this.getPrice();
+        if (adPrice == null || adPrice < 0 || adPrice >= 100000) {
+            throw new InvalidAdInformations("price");
+        }
+    }
+
+    private void isValidRegion() {
+        String adRegion = this.getRegion();
+        if (adRegion == null || adRegion.isEmpty()) {
+            throw new InvalidAdInformations("region");
+        }
+    }
+
+    private void isValidCategory() {
+        String adCategory = this.getCategory();
+        if (adCategory == null || adCategory.isEmpty()) {
+            throw new InvalidAdInformations("category");
+        }else {
+            int categoriesLength = categories.length;
+            for (int i = 0; i < categoriesLength; i++){
+                if (categories[i].equals(adCategory)){
+                    return;
+                }else if (i == categoriesLength - 1){
+                    throw new InvalidAdInformations("category");
+                }
+            }
+        }
+    }
+
+    private void isValidPublicationDate() {
+        String adPublicationDate = this.getPublicationDate();
+        if (adPublicationDate == null || adPublicationDate.length() != 10) {
+            throw new InvalidAdInformations("publication date");
+        }
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate publicationDate = LocalDate.parse(adPublicationDate, formatter);
+
+            LocalDate today = LocalDate.now();
+
+            if (publicationDate.getYear() < 2023 || publicationDate.isAfter(today)) {
+                throw new InvalidAdInformations("publication date");
+            }
+        } catch (DateTimeParseException e) {
+            throw new InvalidAdInformations("publication date");
+        }
     }
 
 }

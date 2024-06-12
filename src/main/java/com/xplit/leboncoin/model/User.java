@@ -112,30 +112,57 @@ public class User {
 
     private void isValidFirstName() {
         String userFirstName = this.getFirstName();
-        if (userFirstName == null || userFirstName.isEmpty()){
+        if (checkType(userFirstName)){
+            if (userFirstName == null || userFirstName.isEmpty()){
+                throw new InvalidUserInformations("first name");
+            }
+        }else {
             throw new InvalidUserInformations("first name");
         }
     }
 
-    private void isValidLastName() {} //Sert simplement à la lisibilité du code
+    private void isValidLastName() {
+        String lastName = this.getLastName();
+        if (lastName != null){
+            if (checkType(lastName)) {
+                if (lastName.isEmpty()){
+                    throw new InvalidUserInformations("last name");
+                }
+            } else {
+                throw new InvalidUserInformations("last name");
+            }
+        }
+    }
 
     private void isValidUsername() {
         String username = this.getUsername();
-        if (username == null || username.isEmpty()){
+        if (checkType(username)){
+            if (username == null || username.isEmpty()){
+                throw new InvalidUserInformations("username");
+            }
+        } else {
             throw new InvalidUserInformations("username");
         }
     }
 
     private void isValidMail() {
         String userMail = this.getMail();
-        if (userMail == null || !userMail.contains("@")){
+        if (checkType(userMail)){
+            if (userMail == null || !userMail.contains("@") || (!userMail.contains(".com") && !userMail.contains(".fr"))){
+                throw new InvalidUserInformations("mail");
+            }
+        } else {
             throw new InvalidUserInformations("mail");
         }
     }
 
     private void isValidRegion() {
         String userRegion = this.getRegion();
-        if (userRegion == null || userRegion.isEmpty()){
+        if (checkType(userRegion)){
+            if (userRegion == null || userRegion.isEmpty()){
+                throw new InvalidUserInformations("region");
+            }
+        } else {
             throw new InvalidUserInformations("region");
         }
     }
@@ -151,10 +178,24 @@ public class User {
 
     private void isValidPhone() {
         String userPhone = this.getPhone();
-        if (userPhone != null){
-            if(userPhone.length() != 10){
+        if (userPhone != null && !userPhone.isEmpty()) {
+            if (!checkType(userPhone)) {
+                if (userPhone.length() != 10) {
+                    throw new InvalidUserInformations("phone");
+                }
+            } else {
                 throw new InvalidUserInformations("phone");
             }
+        }
+    }
+
+    private boolean checkType (String value) {
+        try {
+            Integer.parseInt(value);
+            return false;
+        }
+        catch (NumberFormatException e) {
+            return true;
         }
     }
 
