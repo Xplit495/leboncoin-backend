@@ -21,6 +21,22 @@ public class User {
 
     private String region;
 
+    public User() {//We can think than this constructor is useless,
+                  // but it's not, it's used in the UsersRepository class
+    }
+
+    public User(String firstName, String lastName, String username, String mail,
+                String phone, Integer age, String region) {
+        this.id = UUID.randomUUID();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.mail = mail;
+        this.phone = phone;
+        this.age = age;
+        this.region = region;
+    }
+
     //Getter and Setter
     public UUID getId() {
         return id;
@@ -154,7 +170,7 @@ public class User {
 
     private void isValidPhone() {
         String userPhone = this.getPhone();
-        if (userPhone != null && (userPhone.isEmpty() || checkType(userPhone) || userPhone.length() != 10)) {
+        if (userPhone != null && (userPhone.isEmpty() || checkType(userPhone) || userPhone.length() != 10 || !userPhone.startsWith("0"))){
             throw new InvalidUserInformations("phone");
         }
     }
