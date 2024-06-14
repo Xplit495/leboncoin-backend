@@ -57,6 +57,12 @@ public class Application {
                             users.add(potentialUser);
                         }
                     }
+                    case 4 -> {
+                        Ad potentialAd = AdService.createAd(users);
+                        if (potentialAd != null) {
+                            ads.add(potentialAd);
+                        }
+                    }
 
 
                     case 9 -> System.exit(0);

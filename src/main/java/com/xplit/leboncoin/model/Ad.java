@@ -41,6 +41,22 @@ public class Ad {
             "Electroménager",
     };
 
+    public Ad() {//We can think than this constructor is useless,
+                // but it's not, it's used in the AdsRepository class
+    }
+
+    public Ad(UUID publishBy, String title, String description, String[] pictures, Integer price,
+              String region, String category, String publicationDate) {
+        this.publishBy = publishBy;
+        this.title = title;
+        this.description = description;
+        this.pictures = pictures;
+        this.price = price;
+        this.region = region;
+        this.category = category;
+        this.publicationDate = publicationDate;
+    }
+
     //Getter and Setter
     public UUID publishBy() {
         return publishBy;
@@ -107,7 +123,7 @@ public class Ad {
     }
 
     public String toString() {
-        return "\nAd{" +
+        return "\nAd\n{" +
                 "\nToUserId: " + this.publishBy +
                 "\nTitle: " + this.title +
                 "\nDescription: " + this.description  +
@@ -116,7 +132,7 @@ public class Ad {
                 "\nRegion: " + this.region +
                 "\nCategory: " + this.category +
                 "\nPublicationDate: " + this.publicationDate +
-                "}\n";
+                "\n}\n";
     }
 
     //Validation methods

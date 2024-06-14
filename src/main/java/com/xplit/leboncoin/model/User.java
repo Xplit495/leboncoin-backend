@@ -103,7 +103,7 @@ public class User {
     }
 
     public String toString() {
-        return "{\nUser" +
+        return "\nUser\n{" +
                 "\nID: " + this.id +
                 "\nFirstName: " + this.firstName +
                 "\nLastName: " + this.lastName +
@@ -112,7 +112,7 @@ public class User {
                 "\nPhone: " + this.phone +
                 "\nAge: " + this.age +
                 "\nRegion: " + this.region
-                + "}\n";
+                + "\n}\n";
     }
 
     //Validation methods

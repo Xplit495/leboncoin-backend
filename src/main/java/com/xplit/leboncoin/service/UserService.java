@@ -20,24 +20,24 @@ public class UserService {
 
         String[] prompt = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Nom d'utilisateur (Obligatoire)",
                 "Mail (Obligatoire)", "Téléphone (Facultatif)", "Âge (Facultatif)" ,"Région (Obligatoire)"};
-        String[] userInfo = new String[7];
+        String[] userInfos = new String[7];
 
         for (int i = 0; i < prompt.length; i++) {
             System.out.print(prompt[i] + " : ");
             String input = scanner.nextLine();
 
             if (input.isEmpty()){
-                userInfo[i] = null;
+                userInfos[i] = null;
             } else {
-                userInfo[i] = input;
+                userInfos[i] = input;
             }
         }
 
         try {
-            age = Integer.parseInt(userInfo[5]);
+            age = Integer.parseInt(userInfos[5]);
         } catch (NumberFormatException ignored) {}
 
-        User tempUser = new User (userInfo[0], userInfo[1], userInfo[2], userInfo[3], userInfo[4], age, userInfo[6]);
+        User tempUser = new User (userInfos[0], userInfos[1], userInfos[2], userInfos[3], userInfos[4], age, userInfos[6]);
 
         try {
             tempUser.isValidUser();
@@ -46,6 +46,7 @@ public class UserService {
             return null;
         }
 
+        System.out.println("\nUtilisateur créé avec succès");
         return tempUser;
     }
 
