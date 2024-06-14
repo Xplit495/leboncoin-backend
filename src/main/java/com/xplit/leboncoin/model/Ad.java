@@ -132,14 +132,14 @@ public class Ad {
 
     private void isValidTitle() {
         String adTitle = this.getTitle();
-        if (adTitle == null || adTitle.isEmpty()) {
+        if (adTitle == null || adTitle.isEmpty() || !checkType(adTitle)) {
             throw new InvalidAdInformations("title");
         }
     }
 
     private void isValidDescription() {
         String adDescription = this.getDescription();
-        if (adDescription == null || adDescription.isEmpty()) {
+        if (adDescription == null || adDescription.isEmpty() || !checkType(adDescription)) {
             throw new InvalidAdInformations("description");
         }
     }
@@ -148,10 +148,10 @@ public class Ad {
         String[] adPictures = this.getPictures();
         if (adPictures != null && adPictures.length > 0) {
             for (String adPicture : adPictures) {
-                if (!adPicture.startsWith("image")) {
-                    throw new InvalidAdInformations("pictures");
+                    if (!adPicture.startsWith("image") || !checkType(adPicture)) {
+                        throw new InvalidAdInformations("pictures");
+                    }
                 }
-            }
         }else {
             throw new InvalidAdInformations("pictures");
         }
@@ -159,21 +159,21 @@ public class Ad {
 
     private void isValidPrice() {
         Integer adPrice = this.getPrice();
-        if (adPrice == null || adPrice < 0 || adPrice >= 100000) {
+        if (adPrice == null || checkType(String.valueOf(adPrice)) || adPrice < 0 || adPrice >= 10000) {
             throw new InvalidAdInformations("price");
         }
     }
 
     private void isValidRegion() {
         String adRegion = this.getRegion();
-        if (adRegion == null || adRegion.isEmpty()) {
+        if (adRegion == null || adRegion.isEmpty() || !checkType(adRegion)) {
             throw new InvalidAdInformations("region");
         }
     }
 
     private void isValidCategory() {
         String adCategory = this.getCategory();
-        if (adCategory == null || adCategory.isEmpty()) {
+        if (adCategory == null || adCategory.isEmpty() || !checkType(adCategory)) {
             throw new InvalidAdInformations("category");
         }else {
             int categoriesLength = categories.length;
@@ -191,19 +191,28 @@ public class Ad {
         String adPublicationDate = this.getPublicationDate();
         if (adPublicationDate == null || adPublicationDate.length() != 10) {
             throw new InvalidAdInformations("publication date");
-        }
+        } else {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate publicationDate = LocalDate.parse(adPublicationDate, formatter);
 
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate publicationDate = LocalDate.parse(adPublicationDate, formatter);
+                LocalDate today = LocalDate.now();
 
-            LocalDate today = LocalDate.now();
-
-            if (publicationDate.getYear() < 2023 || publicationDate.isAfter(today)) {
+                if (publicationDate.getYear() < 2023 || publicationDate.isAfter(today)) {
+                    throw new InvalidAdInformations("publication date");
+                }
+            } catch (DateTimeParseException e) {
                 throw new InvalidAdInformations("publication date");
             }
-        } catch (DateTimeParseException e) {
-            throw new InvalidAdInformations("publication date");
+        }
+    }
+
+    private boolean checkType(String value) {
+        try {
+            Integer.parseInt(value);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
         }
     }
 

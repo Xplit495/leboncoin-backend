@@ -1,5 +1,6 @@
 package com.xplit.leboncoin.util;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +23,7 @@ public class DataInitializer {
 
         try (JsonParser parser = mapper.createParser(file)) {
             if (parser.nextToken() != JsonToken.START_ARRAY) {
-                throw new IOException("Expected start of array in the JSON file.");
+                throw new IOException("(User) Expected start of array in the JSON file.");
             }
 
             ObjectReader reader = mapper.readerFor(User.class);
@@ -38,10 +39,16 @@ public class DataInitializer {
                     users.add(user);
                 } catch (InvalidUserInformations e) {
                     System.out.println(e.getMessage() + user);
+                }  catch (JsonParseException e) {
+                    System.out.println("(User) Error of deserialization (Check json type) : " + e.getMessage());
+                    break;
                 } catch (Exception e) {
-                    System.out.println("Error of deserialization (Check json type) : " + e.getMessage());
+                    System.out.println("(User) Error of deserialization (Check json type or syntax) : " + e.getMessage());
                 }
             }
+        } catch (IOException e) {
+            System.err.println("(User) Cannot open or read the file: " + e.getMessage());
+            throw e;
         }
 
         return users;
@@ -54,7 +61,7 @@ public class DataInitializer {
 
         try (JsonParser parser = mapper.createParser(file)) {
             if (parser.nextToken() != JsonToken.START_ARRAY) {
-                throw new IOException("Expected start of array in the JSON file.");
+                throw new IOException("(Ad) Expected start of array in the JSON file.");
             }
 
             ObjectReader reader = mapper.readerFor(Ad.class);
@@ -72,13 +79,19 @@ public class DataInitializer {
                     ads.add(ad);
                 } catch (InvalidAdInformations e) {
                     System.out.println(e.getMessage() + ad);
-                } catch (Exception e) {
-                    System.out.println("Error of deserialization (Check json type) : " + e.getMessage());
+                } catch (JsonParseException e) {
+                    System.out.println("(Ad) Error of deserialization (Check json type) : " + e.getMessage());
+                    break;
+                }catch (Exception e) {
+                    System.out.println("(Ad) Error of deserialization (Check json type) : " + e.getMessage());
                 }
-
             }
+        } catch (IOException e) {
+            System.err.println("(Ad) Cannot open or read the file: " + e.getMessage());
+            throw e;
         }
 
         return ads;
     }
+
 }

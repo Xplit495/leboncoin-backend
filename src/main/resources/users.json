@@ -9,7 +9,8 @@
     "firstName": "Marie",
     "lastName": "Dupont",
     "username": "marie.dupont",
-    "phone": "0612345678",
+    "age": 28,
+    "phone": "0654709658",
     "region": "Bretagne",
     "mail": "marie.dupont@example.com"
   },

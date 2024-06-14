@@ -23,7 +23,7 @@ public class Application {
             }
 
         } catch (Exception e) {
-            System.out.println("Application.java error JSON : " + e.getMessage());
+            System.out.println("Application.java unknown error " + e.getMessage());
         }
     }
 }

@@ -112,80 +112,50 @@ public class User {
 
     private void isValidFirstName() {
         String userFirstName = this.getFirstName();
-        if (checkType(userFirstName)){
-            if (userFirstName == null || userFirstName.isEmpty()){
-                throw new InvalidUserInformations("first name");
-            }
-        }else {
+        if (userFirstName == null || userFirstName.isEmpty() || !checkType(userFirstName)) {
             throw new InvalidUserInformations("first name");
         }
     }
 
     private void isValidLastName() {
         String lastName = this.getLastName();
-        if (lastName != null){
-            if (checkType(lastName)) {
-                if (lastName.isEmpty()){
-                    throw new InvalidUserInformations("last name");
-                }
-            } else {
-                throw new InvalidUserInformations("last name");
-            }
+        if (lastName != null && (lastName.isEmpty() || !checkType(lastName))){
+            throw new InvalidUserInformations("last name");
         }
     }
 
     private void isValidUsername() {
         String username = this.getUsername();
-        if (checkType(username)){
-            if (username == null || username.isEmpty()){
-                throw new InvalidUserInformations("username");
-            }
-        } else {
+        if (username == null || username.isEmpty() || !checkType(username)) {
             throw new InvalidUserInformations("username");
         }
     }
 
     private void isValidMail() {
         String userMail = this.getMail();
-        if (checkType(userMail)){
-            if (userMail == null || !userMail.contains("@") || (!userMail.contains(".com") && !userMail.contains(".fr"))){
-                throw new InvalidUserInformations("mail");
-            }
-        } else {
+        if (userMail == null || userMail.isEmpty() || !checkType(userMail) || !userMail.contains("@") || (!userMail.contains(".com") && !userMail.contains(".fr"))){
             throw new InvalidUserInformations("mail");
         }
     }
 
     private void isValidRegion() {
         String userRegion = this.getRegion();
-        if (checkType(userRegion)){
-            if (userRegion == null || userRegion.isEmpty()){
+        if (userRegion == null || userRegion.isEmpty() || !checkType(userRegion)){
                 throw new InvalidUserInformations("region");
-            }
-        } else {
-            throw new InvalidUserInformations("region");
         }
     }
 
     private void isValidAge() {
         Integer userAge = this.getAge();
-        if (userAge != null){
-            if(userAge < 17 || userAge > 100){
-                throw new InvalidUserInformations("age");
-            }
+        if (userAge != null && (checkType(String.valueOf(userAge)) || userAge < 17 || userAge > 100)){
+            throw new InvalidUserInformations("age");
         }
     }
 
     private void isValidPhone() {
         String userPhone = this.getPhone();
-        if (userPhone != null && !userPhone.isEmpty()) {
-            if (!checkType(userPhone)) {
-                if (userPhone.length() != 10) {
-                    throw new InvalidUserInformations("phone");
-                }
-            } else {
-                throw new InvalidUserInformations("phone");
-            }
+        if (userPhone != null && (userPhone.isEmpty() || checkType(userPhone) || userPhone.length() != 10)) {
+            throw new InvalidUserInformations("phone");
         }
     }
 
