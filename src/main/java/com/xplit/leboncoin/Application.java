@@ -51,18 +51,9 @@ public class Application {
                 switch (input) {
                     case 1 -> UserService.showUsers(users);
                     case 2 -> AdService.showAds(ads);
-                    case 3 -> {
-                        User potentialUser = UserService.createUser();
-                        if (potentialUser != null) {
-                            users.add(potentialUser);
-                        }
-                    }
-                    case 4 -> {
-                        Ad potentialAd = AdService.createAd(users);
-                        if (potentialAd != null) {
-                            ads.add(potentialAd);
-                        }
-                    }
+                    case 3 -> UserService.createUser(users);
+                    case 4 -> AdService.createAd(users, ads);
+                    case 5 -> UserService.updateUser(users);
 
 
                     case 9 -> System.exit(0);

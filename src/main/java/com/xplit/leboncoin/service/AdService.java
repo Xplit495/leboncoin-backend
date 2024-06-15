@@ -18,41 +18,13 @@ public class AdService {
         ads.forEach(System.out::println);
     }
 
-    public static Ad createAd(List<User> users) {
+    public static void createAd(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
-        UUID publishBy;
-        User currentUser;
 
-        boolean repetition = true;
-        while (true) {
-            if (repetition) {
-                System.out.println("\nListe des utilisateurs :\n\n");
-                for (int i = 0; i < users.size(); i++) {
-                    System.out.println(i + 1 + " :" + "\n"
-                            + "ID : " + users.get(i).getId() + "\n"
-                            + "Prénom : " + users.get(i).getFirstName() + "\n"
-                            + "Nom : " + users.get(i).getLastName() + "\n"
-                            + "Pseudo : " + users.get(i).getUsername() + "\n"
-                            + "Mail : " + users.get(i).getMail() + "\n\n");
-                }
-            }
-            System.out.print("À quel utilisateur souhaitez vous attribuer cette annonce ? : ");
-            String input = scanner.nextLine();
-            try {
-                int index = Integer.parseInt(input) - 1;
-                if (index >= 0 && index < users.size()) {
-                    publishBy = users.get(index).getId();
-                    currentUser = users.get(index);
-                    break;
-                } else {
-                    System.out.println("\nVeuillez entrer un nombre entier de la liste");
-                    repetition = false;
-                }
-            } catch (NumberFormatException ignored) {
-                System.out.println("\nVeuillez entrer un nombre entier");
-                repetition = false;
-            }
-        }
+        String message = "À quel utilisateur souhaitez vous attribuer cette annonce ? : ";
+        int index = UserService.listAndSelectUser(users, message);
+        UUID publishBy = users.get(index).getId();
+        User currentUser = users.get(index);
 
         Integer adPrice = null;
         String[] prompt = {"Titre (Obligatoire)", "Description (Obligatoire)", "Prix (Sans €) (Obligatoire)",
@@ -106,11 +78,13 @@ public class AdService {
             tempAd.isValidAd();
         }catch (InvalidAdInformations e) {
             System.out.println(e.getMessage());
-            return null;
+            tempAd = null;
         }
 
-        System.out.println("\nAnnonce créé avec succès");
-        return tempAd;
+        if (tempAd != null) {
+            System.out.println("\nAnnonce créé avec succès");
+            ads.add(tempAd);
+        }
     }
 
 }
