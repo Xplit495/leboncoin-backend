@@ -5,7 +5,6 @@ import com.xplit.leboncoin.util.InvalidUserInformations;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.UUID;
 
 public class UserService {
 
@@ -19,19 +18,14 @@ public class UserService {
         Scanner scanner = new Scanner(System.in);
         Integer age = null;
 
-        String[] prompt = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Nom d'utilisateur (Obligatoire)",
+        String[] prompt = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Pseudo (Obligatoire)",
                 "Mail (Obligatoire)", "Téléphone (Facultatif)", "Âge (Facultatif)" ,"Région (Obligatoire)"};
         String[] userInfos = new String[7];
 
         for (int i = 0; i < prompt.length; i++) {
             System.out.print(prompt[i] + " : ");
             String input = scanner.nextLine();
-
-            if (input.isEmpty()){
-                userInfos[i] = null;
-            } else {
-                userInfos[i] = input;
-            }
+            userInfos[i] = input;
         }
 
         try {
@@ -58,19 +52,106 @@ public class UserService {
         Scanner scanner = new Scanner(System.in);
         String message = "Quel utilisateur souhaitez-vous modifier ? : ";
         int index = listAndSelectUser(users, message);
-        User userToUpdate = users.get(index);
 
-        System.out.println("\nVous avez sélectionné l'utilisateur suivant :\n\n" + userToUpdate +
-                "\nQuelle information souhaitez-vous modifier ?" +
-                "\n 1. Prénom" +
-                "\n 2. Nom" +
-                "\n 3. Nom d'utilisateur" +
-                "\n 4. Âge" +
-                "\n 5. Téléphone" +
-                "\n 6. Région" +
-                "\n 7. Mail" +
-                "\n 8. Annuler\n");
+        while (true) {
+            User originalUser = users.get(index);
+            User userCopy = new User(originalUser);
 
+            System.out.println("\nL'utilisateur sélectionné est :\n" + originalUser);
+            printMenu();
+
+            try {
+                int input = Integer.parseInt(scanner.nextLine());
+                if (input == 8) {
+                    System.out.println("\nSortie de la modification\n");
+                    return;
+                }
+
+                if (input >= 1 && input <= 7) {
+                    processInput(input, userCopy, scanner);
+
+                    try {
+                        userCopy.isValidUser();
+                        users.set(index, userCopy);
+                        System.out.println("\nUtilisateur modifié avec succès\n " + userCopy);
+
+                        if (!askToContinue(scanner)) return;
+                    } catch (InvalidUserInformations e){
+                        System.out.println(e.getMessage() + "\n" + "Données invalides, aucun changement appliqué" );
+                    }
+                } else {
+                    System.out.println("Veuillez entrer un nombre entre 1 et 8");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer un nombre valide.");
+            }
+        }
+    }
+
+    private static void printMenu() {
+        System.out.print("""
+                Quelle information souhaitez-vous modifier ?\
+                
+                 1. Prénom\
+                
+                 2. Nom\
+                
+                 3. Pseudo\
+                
+                 4. Mail\
+                
+                 5. Téléphone\
+                
+                 6. Âge\
+                
+                 7. Région\
+                
+                 8. Quitter\
+                
+
+                Votre choix :\s""");
+    }
+
+    private static void processInput(int input, User userCopy, Scanner scanner) {
+        switch (input) {
+            case 1 -> userCopy.setFirstName(getInput(scanner, "\nNouveau prénom : "));
+            case 2 -> userCopy.setLastName(getInput(scanner, "\nNouveau nom : "));
+            case 3 -> userCopy.setUsername(getInput(scanner, "\nNouveau pseudo : "));
+            case 4 -> userCopy.setMail(getInput(scanner, "\nNouveau mail : "));
+            case 5 -> userCopy.setPhone(getInput(scanner, "\nNouveau téléphone : "));
+            case 6 -> userCopy.setAge(getValidInteger(scanner));
+            case 7 -> userCopy.setRegion(getInput(scanner, "\nNouvelle région : "));
+        }
+    }
+
+    private static String getInput(Scanner scanner, String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
+
+    private static Integer getValidInteger(Scanner scanner) {
+        while (true) {
+            System.out.print("\nNouvel âge : ");
+            try {
+                String input = scanner.nextLine();
+                if (input.isEmpty()) return null;
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer un nombre entier.");
+            }
+        }
+    }
+
+    private static boolean askToContinue(Scanner scanner) {
+        System.out.print("Voulez-vous modifier une autre information ?\n1. Oui\n2. Non\n\nVotre choix : ");
+        while (true) {
+            try {
+                int choice = Integer.parseInt(scanner.nextLine());
+                return choice == 1;
+            } catch (NumberFormatException e) {
+                System.out.print("\nVeuillez saisir un nombre entier.\nVotre choix : ");
+            }
+        }
     }
 
     public static int listAndSelectUser (List<User> users, String message) {
@@ -81,10 +162,10 @@ public class UserService {
 
         while (true) {
             if (repetition) {
-                System.out.println("\nListe des utilisateurs :\n\n");
+                System.out.println("\nListe des utilisateurs :\n");
                 int count = 1;
                 for (User user : users) {
-                    System.out.printf("%d :\nID : %s\nPrénom : %s\nNom : %s\nPseudo : %s\nMail : %s\n\n",
+                    System.out.printf("%d.\nID : %s\nPrénom : %s\nNom : %s\nPseudo : %s\nMail : %s\n\n",
                             count++, user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getMail());
                 }
             }

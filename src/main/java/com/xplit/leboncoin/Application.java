@@ -11,11 +11,12 @@ import java.util.Scanner;
 
 public class Application {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
         try {
             List<User> users = DataInitializer.initializeUsers("src/main/resources/users.json");
             List<Ad> ads = DataInitializer.initializeAds("src/main/resources/ads.json", users);
 
-            Scanner scanner = new Scanner(System.in);
 
             while (true) {
                 int input = 0;
@@ -45,7 +46,7 @@ public class Application {
                 try {
                     input = Integer.parseInt(scanner.nextLine());
                 } catch (NumberFormatException ignored) {
-                    System.out.println("Veuillez entrer un nombre valide");
+                    System.out.println("\nVeuillez entrer un nombre valide");
                 }
 
                 switch (input) {
@@ -55,8 +56,11 @@ public class Application {
                     case 4 -> AdService.createAd(users, ads);
                     case 5 -> UserService.updateUser(users);
 
-
-                    case 9 -> System.exit(0);
+                    case 9 -> {
+                        System.out.println("Au revoir !");
+                        scanner.close();
+                        return;
+                    }
                 }
             }
         } catch (Exception e) {

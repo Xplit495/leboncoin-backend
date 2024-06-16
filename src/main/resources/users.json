@@ -2,83 +2,74 @@
   {
     "firstName": "Pierre",
     "username": "pierre123",
-    "region": "Île-de-France",
-    "mail": "pierre123@example.com"
+    "mail": "pierre123@example.com",
+    "region": "Île-de-France"
   },
   {
     "firstName": "Marie",
     "lastName": "Dupont",
     "username": "marie.dupont",
+    "mail": "marie.dupont@example.com",
     "age": 28,
     "phone": "0654709658",
-    "region": "Bretagne",
-    "mail": "marie.dupont@example.com"
-  },
+    "region": "Bretagne"},
   {
     "firstName": "Jean",
     "username": "jeanpierre",
+    "mail": "jean.jeanpierre@example.com",
     "age": 19,
-    "region": "Auvergne-Rhône-Alpes",
-    "mail": "jean.jeanpierre@example.com"
+    "region": "Auvergne-Rhône-Alpes"
   },
   {
     "firstName": "Sophie",
     "lastName": "Martin",
     "username": "sophie.martin",
+    "mail": "sophie.martin@example.com",
     "phone": "0623456789",
     "age": 43,
-    "region": "Occitanie",
-    "mail": "sophie.martin@example.com"
+    "region": "Occitanie"
   },
   {
     "firstName": "Luc",
     "username": "luc.lucas",
-    "region": "Grand Est",
-    "mail": "luc.lucas@example.com"
+    "mail": "luc.lucas@example.com",
+    "region": "Grand Est"
   },
   {
     "firstName": "Alice",
     "lastName": "Lefebvre",
     "username": "alice.lefebvre",
-    "region": "Normandie",
-    "mail": "alice.lefebvre@example.com"
+    "mail": "alice.lefebvre@example.com",
+    "region": "Normandie"
   },
   {
     "firstName": "Thomas",
     "username": "thomas.thomas",
+    "mail": "thomas.thomas@example.com",
     "phone": "0634567890",
-    "region": "Pays de la Loire",
-    "mail": "thomas.thomas@example.com"
+    "region": "Pays de la Loire"
   },
   {
     "firstName": "Léa",
     "lastName": "Garcia",
     "username": "lea.garcia",
+    "mail": "lea.garcia@example.com",
     "age": 32,
-    "region": "Provence-Alpes-Côte d'Azur",
-    "mail": "lea.garcia@example.com"
+    "region": "Provence-Alpes-Côte d'Azur"
   },
   {
     "firstName": "Alexandre",
     "username": "alexandre.alex43",
-    "region": "Corse",
-    "mail": "alexandre43.alex@example.com"
+    "mail": "alexandre43.alex@example.com",
+    "region": "Corse"
   },
   {
     "firstName": "Charlotte",
     "lastName": "Roux",
     "username": "charlotte.roux",
+    "mail": "charlotte.roux@example.com",
     "phone": "0645678901",
     "age": 43,
-    "region": "Nouvelle-Aquitaine",
-    "mail": "charlotte.roux@example.com"
-  },
-  {
-    "firstName": "Tamère",
-    "lastName": "Lapute",
-    "username": "tamere.lapute",
-    "region": "Normandie",
-    "phone": "0656785687",
-    "mail": "tamere.lapute@example.com"
+    "region": "Nouvelle-Aquitaine"
   }
 ]

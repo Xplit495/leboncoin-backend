@@ -37,6 +37,17 @@ public class User {
         this.region = region;
     }
 
+    public User(User userToCopy) {
+        this.id = userToCopy.getId();
+        this.firstName = userToCopy.getFirstName();
+        this.lastName = userToCopy.getLastName();
+        this.username = userToCopy.getUsername();
+        this.mail = userToCopy.getMail();
+        this.phone = userToCopy.getPhone();
+        this.age = userToCopy.getAge();
+        this.region = userToCopy.getRegion();
+    }
+
     //Getter and Setter
     public UUID getId() {
         return id;
@@ -103,15 +114,15 @@ public class User {
     }
 
     public String toString() {
-        return "\nUser\n{" +
+        return "\nUtilisateur\n{" +
                 "\nID: " + this.id +
-                "\nFirstName: " + this.firstName +
-                "\nLastName: " + this.lastName +
-                "\nUsername: " + this.username +
+                "\nPrénom: " + this.firstName +
+                "\nNom: " + this.lastName +
+                "\nPseudo: " + this.username +
                 "\nMail: " + this.mail +
-                "\nPhone: " + this.phone +
-                "\nAge: " + this.age +
-                "\nRegion: " + this.region
+                "\nTéléphone: " + this.phone +
+                "\nÂge: " + this.age +
+                "\nRégion: " + this.region
                 + "\n}\n";
     }
 
@@ -121,9 +132,9 @@ public class User {
         isValidLastName();
         isValidUsername();
         isValidMail();
-        isValidRegion();
-        isValidAge();
         isValidPhone();
+        isValidAge();
+        isValidRegion();
     }
 
     private void isValidFirstName() {
@@ -135,7 +146,7 @@ public class User {
 
     private void isValidLastName() {
         String lastName = this.getLastName();
-        if (lastName != null && (lastName.isEmpty() || !checkType(lastName))){
+        if (lastName != null && !lastName.isEmpty() && !checkType(lastName)){
             throw new InvalidUserInformations("last name");
         }
     }
@@ -154,10 +165,10 @@ public class User {
         }
     }
 
-    private void isValidRegion() {
-        String userRegion = this.getRegion();
-        if (userRegion == null || userRegion.isEmpty() || !checkType(userRegion)){
-                throw new InvalidUserInformations("region");
+    private void isValidPhone() {
+        String userPhone = this.getPhone();
+        if (userPhone != null && !userPhone.isEmpty() && (checkType(userPhone) || userPhone.length() != 10 || !userPhone.startsWith("0"))){
+            throw new InvalidUserInformations("phone");
         }
     }
 
@@ -168,10 +179,10 @@ public class User {
         }
     }
 
-    private void isValidPhone() {
-        String userPhone = this.getPhone();
-        if (userPhone != null && (userPhone.isEmpty() || checkType(userPhone) || userPhone.length() != 10 || !userPhone.startsWith("0"))){
-            throw new InvalidUserInformations("phone");
+    private void isValidRegion() {
+        String userRegion = this.getRegion();
+        if (userRegion == null || userRegion.isEmpty() || !checkType(userRegion)){
+                throw new InvalidUserInformations("region");
         }
     }
 
