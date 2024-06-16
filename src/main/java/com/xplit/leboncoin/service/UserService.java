@@ -1,5 +1,6 @@
 package com.xplit.leboncoin.service;
 
+import com.xplit.leboncoin.model.Ad;
 import com.xplit.leboncoin.model.User;
 import com.xplit.leboncoin.util.InvalidUserInformations;
 
@@ -48,7 +49,7 @@ public class UserService {
 
     }
 
-    public static void updateUser(List<User> users) {
+    public static void updateUser(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
         String message = "Quel utilisateur souhaitez-vous modifier ? : ";
         int index = listAndSelectUser(users, message);
@@ -62,22 +63,28 @@ public class UserService {
 
             try {
                 int input = Integer.parseInt(scanner.nextLine());
-                if (input == 8) {
+                if (input == 9) {
                     System.out.println("\nSortie de la modification\n");
                     return;
                 }
 
-                if (input >= 1 && input <= 7) {
+                if (input == 1) {
+                    originalUser.newId(scanner, ads);
+                    if (originalUser.getId().equals(userCopy.getId())) {
+                        System.out.println("\nAucun changement appliqué");
+                    } else {
+                        System.out.println("\nUtilisateur modifié avec succès\n");
+                    }
+                } else if (input >= 2 && input <= 8) {
                     processInput(input, userCopy, scanner);
 
                     try {
                         userCopy.isValidUser();
                         users.set(index, userCopy);
-                        System.out.println("\nUtilisateur modifié avec succès\n " + userCopy);
+                        System.out.println("\nUtilisateur modifié avec succès\n ");
 
-                        if (!askToContinue(scanner)) return;
-                    } catch (InvalidUserInformations e){
-                        System.out.println(e.getMessage() + "\n" + "Données invalides, aucun changement appliqué" );
+                    } catch (InvalidUserInformations e) {
+                        System.out.println(e.getMessage() + "\n" + "Données invalides, aucun changement appliqué");
                     }
                 } else {
                     System.out.println("Veuillez entrer un nombre entre 1 et 8");
@@ -92,21 +99,23 @@ public class UserService {
         System.out.print("""
                 Quelle information souhaitez-vous modifier ?\
                 
-                 1. Prénom\
+                1. ID\
                 
-                 2. Nom\
+                2. Prénom\
                 
-                 3. Pseudo\
+                3. Nom\
                 
-                 4. Mail\
+                4. Pseudo\
                 
-                 5. Téléphone\
+                5. Mail\
                 
-                 6. Âge\
+                6. Téléphone\
                 
-                 7. Région\
+                7. Âge\
                 
-                 8. Quitter\
+                8. Région\
+                
+                9. Quitter\
                 
 
                 Votre choix :\s""");
@@ -114,13 +123,13 @@ public class UserService {
 
     private static void processInput(int input, User userCopy, Scanner scanner) {
         switch (input) {
-            case 1 -> userCopy.setFirstName(getInput(scanner, "\nNouveau prénom : "));
-            case 2 -> userCopy.setLastName(getInput(scanner, "\nNouveau nom : "));
-            case 3 -> userCopy.setUsername(getInput(scanner, "\nNouveau pseudo : "));
-            case 4 -> userCopy.setMail(getInput(scanner, "\nNouveau mail : "));
-            case 5 -> userCopy.setPhone(getInput(scanner, "\nNouveau téléphone : "));
-            case 6 -> userCopy.setAge(getValidInteger(scanner));
-            case 7 -> userCopy.setRegion(getInput(scanner, "\nNouvelle région : "));
+            case 2 -> userCopy.setFirstName(getInput(scanner, "\nNouveau prénom : "));
+            case 3 -> userCopy.setLastName(getInput(scanner, "\nNouveau nom : "));
+            case 4 -> userCopy.setUsername(getInput(scanner, "\nNouveau pseudo : "));
+            case 5 -> userCopy.setMail(getInput(scanner, "\nNouveau mail : "));
+            case 6 -> userCopy.setPhone(getInput(scanner, "\nNouveau téléphone : "));
+            case 7 -> userCopy.setAge(getValidAge(scanner));
+            case 8 -> userCopy.setRegion(getInput(scanner, "\nNouvelle région : "));
         }
     }
 
@@ -129,7 +138,7 @@ public class UserService {
         return scanner.nextLine();
     }
 
-    private static Integer getValidInteger(Scanner scanner) {
+    private static Integer getValidAge(Scanner scanner) {
         while (true) {
             System.out.print("\nNouvel âge : ");
             try {
@@ -142,50 +151,39 @@ public class UserService {
         }
     }
 
-    private static boolean askToContinue(Scanner scanner) {
-        System.out.print("Voulez-vous modifier une autre information ?\n1. Oui\n2. Non\n\nVotre choix : ");
-        while (true) {
-            try {
-                int choice = Integer.parseInt(scanner.nextLine());
-                return choice == 1;
-            } catch (NumberFormatException e) {
-                System.out.print("\nVeuillez saisir un nombre entier.\nVotre choix : ");
-            }
-        }
-    }
-
-    public static int listAndSelectUser (List<User> users, String message) {
+    public static int listAndSelectUser (List<User> users, String prompt) {
         Scanner scanner = new Scanner(System.in);
 
-        int index;
+        int userIndex;
         boolean repetition = true;
 
         while (true) {
             if (repetition) {
-                System.out.println("\nListe des utilisateurs :\n");
-                int count = 1;
-                for (User user : users) {
-                    System.out.printf("%d.\nID : %s\nPrénom : %s\nNom : %s\nPseudo : %s\nMail : %s\n\n",
-                            count++, user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getMail());
+                repetition = false;
+                System.out.println("\nListe des utilisateurs :");
+                for (int i = 0; i < users.size(); i++) {
+                    System.out.println("\n" + (i + 1) + ".");
+                    System.out.print("========================================");
+                    System.out.println(users.get(i).shortToString());
+                    System.out.print("========================================\n");
                 }
             }
-            System.out.print(message);
+
+            System.out.print('\n' + prompt);
             String input = scanner.nextLine();
             try {
-                index = Integer.parseInt(input) - 1;
-                index = index >= 0 && index < users.size() ? index : 0;
-                if (index != 0) {
+                userIndex = Integer.parseInt(input) - 1;
+                userIndex = userIndex >= 0 && userIndex < users.size() ? userIndex : 0;
+                if (userIndex != 0) {
                     break;
                 } else {
-                    System.out.println("\nVeuillez entrer un nombre entier de la liste");
-                    repetition = false;
+                    System.out.println("\nVeuillez entrer un nombre de la liste des utilisateurs");
                 }
             } catch (NumberFormatException ignored) {
                 System.out.println("\nVeuillez entrer un nombre entier");
-                repetition = false;
             }
         }
-        return index;
+        return userIndex;
     }
 
 }

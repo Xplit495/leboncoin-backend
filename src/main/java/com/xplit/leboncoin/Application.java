@@ -54,10 +54,11 @@ public class Application {
                     case 2 -> AdService.showAds(ads);
                     case 3 -> UserService.createUser(users);
                     case 4 -> AdService.createAd(users, ads);
-                    case 5 -> UserService.updateUser(users);
+                    case 5 -> UserService.updateUser(users, ads);
+                    case 6 -> AdService.updateAd(users, ads);
 
                     case 9 -> {
-                        System.out.println("Au revoir !");
+                        System.out.println("\nAu revoir !");
                         scanner.close();
                         return;
                     }

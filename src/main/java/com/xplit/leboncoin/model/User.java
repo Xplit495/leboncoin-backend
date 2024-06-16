@@ -1,5 +1,7 @@
 package com.xplit.leboncoin.model;
 
+import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 import com.xplit.leboncoin.util.InvalidUserInformations;
 
@@ -22,7 +24,7 @@ public class User {
     private String region;
 
     public User() {//We can think than this constructor is useless,
-                  // but it's not, it's used in the UsersRepository class
+                  // but it's not, it's used with Jackson
     }
 
     public User(String firstName, String lastName, String username, String mail,
@@ -54,7 +56,9 @@ public class User {
     }
 
     public void setId(UUID id) {
-        this.id = id;
+        if (id != null) {
+            this.id = id;
+        }
     }
 
     public String getFirstName() {
@@ -124,6 +128,44 @@ public class User {
                 "\nÂge: " + this.age +
                 "\nRégion: " + this.region
                 + "\n}\n";
+    }
+
+    public String shortToString() {
+        return "\nID: " + this.id +
+                "\nPrénom: " + this.firstName +
+                "\nNom: " + this.lastName +
+                "\nPseudo: " + this.username +
+                "\nMail: " + this.mail;
+    }
+
+    public void newId (Scanner scanner, List<Ad> ads) {
+        System.out.println("\nPour des raisons de sécurité, l'ID ne peut pas être modifié.\nVoulez-vous en générer un nouveau à la place ?\n1. Oui\n2. Non");
+        while (true) {
+            System.out.print("Votre choix : ");
+            String input = scanner.nextLine();
+            try {
+                int choice = Integer.parseInt(input);
+                if (choice == 1 || choice == 2) {
+                    if (choice == 1) {
+                        UUID newId = UUID.randomUUID();
+                        UUID idToSearch = this.getId();
+
+                        this.setId(newId);
+
+                        for (Ad ad : ads) {
+                            if (ad.getOwner().equals(idToSearch)) {
+                                ad.setOwner(newId);
+                            }
+                        }
+                    }
+                    break;
+                } else {
+                    System.out.println("Veuillez entrer 1 ou 2");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer un nombre entier");
+            }
+        }
     }
 
     //Validation methods

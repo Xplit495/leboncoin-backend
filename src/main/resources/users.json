@@ -15,7 +15,7 @@
     "region": "Bretagne"},
   {
     "firstName": "Jean",
-    "username": "jeanpierre",
+    "username": "JeanJean19",
     "mail": "jean.jeanpierre@example.com",
     "age": 19,
     "region": "Auvergne-Rhône-Alpes"
@@ -38,7 +38,7 @@
   {
     "firstName": "Alice",
     "lastName": "Lefebvre",
-    "username": "alice.lefebvre",
+    "username": "aliceDeNormandie",
     "mail": "alice.lefebvre@example.com",
     "region": "Normandie"
   },

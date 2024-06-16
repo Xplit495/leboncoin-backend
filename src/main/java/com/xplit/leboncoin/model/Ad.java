@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class Ad {
     //Properties
-    private UUID publishBy;
+    private UUID owner;
 
     private String title;
 
@@ -26,7 +26,7 @@ public class Ad {
 
     private String publicationDate;
 
-    public static String[] categories = {
+    public static final String[] categories = {
             "Véhicules",
             "Immobilier",
             "Multimédia",
@@ -42,12 +42,12 @@ public class Ad {
     };
 
     public Ad() {//We can think than this constructor is useless,
-                // but it's not, it's used in the AdsRepository class
+                // but it's not, it's used with Jackson
     }
 
-    public Ad(UUID publishBy, String title, String description, String[] pictures, Integer price,
+    public Ad(UUID owner, String title, String description, String[] pictures, Integer price,
               String region, String category, String publicationDate) {
-        this.publishBy = publishBy;
+        this.owner = owner;
         this.title = title;
         this.description = description;
         this.pictures = pictures;
@@ -57,13 +57,24 @@ public class Ad {
         this.publicationDate = publicationDate;
     }
 
-    //Getter and Setter
-    public UUID publishBy() {
-        return publishBy;
+    public Ad(Ad adToCopy) {
+        this.owner = adToCopy.getOwner();
+        this.title = adToCopy.getTitle();
+        this.description = adToCopy.getDescription();
+        this.pictures = adToCopy.getPictures();
+        this.price = adToCopy.getPrice();
+        this.region = adToCopy.getRegion();
+        this.category = adToCopy.getCategory();
+        this.publicationDate = adToCopy.getPublicationDate();
     }
 
-    public void setPublishBy(UUID toUserId) {
-        this.publishBy = toUserId;
+    //Getter and Setter
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UUID toUserId) {
+        this.owner = toUserId;
     }
 
     public String getTitle() {
@@ -123,16 +134,25 @@ public class Ad {
     }
 
     public String toString() {
-        return "\nAd\n{" +
-                "\nToUserId: " + this.publishBy +
-                "\nTitle: " + this.title +
+        return "\nAnnonce\n{" +
+                "\nPropriétaire: " + this.owner +
+                "\nTitre: " + this.title +
                 "\nDescription: " + this.description  +
-                "\nPictures: " + Arrays.toString(this.pictures) +
-                "\nPrice: " + this.price +
-                "\nRegion: " + this.region +
-                "\nCategory: " + this.category +
-                "\nPublicationDate: " + this.publicationDate +
+                "\nPhotos: " + Arrays.toString(this.pictures) +
+                "\nPrix: " + this.price +
+                "\nRégion: " + this.region +
+                "\nCatégorie: " + this.category +
+                "\nDate de publication: " + this.publicationDate +
                 "\n}\n";
+    }
+
+    public String shortToString() {
+        return "\nPropriétaire: " + this.owner +
+                "\nTitre: " + this.title +
+                "\nDescription: " + this.description +
+                "\nPrix : " + this.price +
+                "\nCatégorie: " + this.category +
+                "\nDate de publication: " + this.publicationDate;
     }
 
     //Validation methods
@@ -162,14 +182,14 @@ public class Ad {
 
     private void isValidPictures() {
         String[] adPictures = this.getPictures();
-        if (adPictures != null && adPictures.length > 0) {
-            for (String adPicture : adPictures) {
-                    if (!adPicture.startsWith("image") || !checkType(adPicture)) {
-                        throw new InvalidAdInformations("pictures");
-                    }
-                }
-        }else {
+        if (adPictures == null || adPictures.length == 0) {
             throw new InvalidAdInformations("pictures");
+        }else {
+            for (String adPicture : adPictures) {
+                if (!adPicture.startsWith("image") || !checkType(adPicture)) {
+                    throw new InvalidAdInformations("pictures");
+                }
+            }
         }
     }
 

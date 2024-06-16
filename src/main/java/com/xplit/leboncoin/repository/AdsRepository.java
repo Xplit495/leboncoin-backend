@@ -36,7 +36,7 @@ public class AdsRepository {
 
                     Random random = new Random();
                     int randomUser = random.nextInt(users.size());
-                    ad.setPublishBy(users.get(randomUser).getId());
+                    ad.setOwner(users.get(randomUser).getId());
 
                     ads.add(ad);
                 } catch (InvalidAdInformations e) {
