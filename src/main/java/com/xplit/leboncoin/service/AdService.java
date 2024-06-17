@@ -37,7 +37,7 @@ public class AdService {
             if (j == 3) {
                 System.out.println("\nListe des catégories :\n" + Arrays.toString(Ad.categories));
             }
-
+            
             System.out.print(questions[j] + " : ");
             String input = scanner.nextLine();
 
@@ -71,7 +71,8 @@ public class AdService {
 
     public static void updateAd(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
-        int index = listAndSelectAd(ads);
+        String prompt = "\nQuelle annonce souhaitez-vous modifier ? : ";
+        int index = listAndSelectAd(ads, prompt);
 
         while (true) {
             Ad originalAd = ads.get(index);
@@ -194,7 +195,39 @@ public class AdService {
         return pictures;
     }
 
-    private static int listAndSelectAd (List<Ad> ads) {
+    public static void deleteAd (List<Ad> ads) {
+        Scanner scanner = new Scanner(System.in);
+        String prompt = "\nQuelle annonce souhaitez-vous supprimer ? : ";
+        int index = listAndSelectAd(ads, prompt);
+
+        Ad adToDelete = ads.get(index);
+        System.out.println("\nL'annonce sélectionné est :\n" + adToDelete);
+
+        System.out.println("Voulez-vous vraiment supprimer cette annonce ?\n1. Oui\n2. Non");
+        while (true) {
+            System.out.print("Votre choix : ");
+            String input = scanner.nextLine();
+            try {
+                int choice = Integer.parseInt(input);
+                if (choice == 1 || choice == 2) {
+                    if (choice == 1) {
+                        ads.remove(index);
+                        System.out.println("\nAnnonce supprimé avec succès\n");
+                    } else {
+                        System.out.println("\nSuppression annulée\n");
+                    }
+                    break;
+                } else {
+                    System.out.println("Veuillez entrer 1 ou" + " 2");
+                }
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer un nombre entier");
+            }
+        }
+    }
+
+    private static int listAndSelectAd (List<Ad> ads, String prompt) {
         Scanner scanner = new Scanner(System.in);
 
         int adIndex;
@@ -212,7 +245,7 @@ public class AdService {
                 }
             }
 
-            System.out.print("\nQuel annonce souhaitez-vous modifier ? : ");
+            System.out.print(prompt);
             String input = scanner.nextLine();
             try {
                 adIndex = Integer.parseInt(input) - 1;

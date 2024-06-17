@@ -151,6 +151,38 @@ public class UserService {
         }
     }
 
+    public static void deleteUser(List<User> users, List<Ad> ads) {
+        Scanner scanner = new Scanner(System.in);
+        String message = "Quel utilisateur souhaitez-vous supprimer ? : ";
+        int index = listAndSelectUser(users, message);
+
+        User userToDelete = users.get(index);
+        System.out.println("\nL'utilisateur sélectionné est :\n" + userToDelete);
+
+        System.out.println("Voulez-vous vraiment supprimer cet utilisateur et toutes ces annonces ?\n1. Oui\n2. Non");
+        while (true) {
+            System.out.print("Votre choix : ");
+            String input = scanner.nextLine();
+            try {
+                int choice = Integer.parseInt(input);
+                if (choice == 1 || choice == 2) {
+                    if (choice == 1) {
+                        users.remove(index);
+                        ads.removeIf(ad -> ad.getOwner().equals(userToDelete.getId()));
+                        System.out.println("\nUtilisateur supprimé avec succès\n");
+                    } else {
+                        System.out.println("\nSuppression annulée\n");
+                    }
+                    break;
+                } else {
+                    System.out.println("Veuillez entrer 1 ou 2");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Veuillez entrer un nombre entier");
+            }
+        }
+    }
+
     public static int listAndSelectUser (List<User> users, String prompt) {
         Scanner scanner = new Scanner(System.in);
 

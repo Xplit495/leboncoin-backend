@@ -56,7 +56,8 @@ public class Application {
                     case 4 -> AdService.createAd(users, ads);
                     case 5 -> UserService.updateUser(users, ads);
                     case 6 -> AdService.updateAd(users, ads);
-
+                    case 7 -> UserService.deleteUser(users, ads);
+                    case 8 -> AdService.deleteAd(ads);
                     case 9 -> {
                         System.out.println("\nAu revoir !");
                         scanner.close();

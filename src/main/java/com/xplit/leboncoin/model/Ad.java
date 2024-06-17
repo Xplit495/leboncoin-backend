@@ -32,7 +32,7 @@ public class Ad {
             "Multimédia",
             "Maison",
             "Loisirs",
-            "Materiel professionnel",
+            "Matériel professionnel",
             "Emploi",
             "Services",
             "Sport",
@@ -213,8 +213,10 @@ public class Ad {
             throw new InvalidAdInformations("category");
         }else {
             int categoriesLength = categories.length;
+            adCategory = adCategory.toLowerCase();
             for (int i = 0; i < categoriesLength; i++){
-                if (categories[i].equals(adCategory)){
+                if (categories[i].toLowerCase().equals(adCategory)){
+                    this.setCategory(adCategory.substring(0, 1).toUpperCase() + adCategory.substring(1));
                     return;
                 }else if (i == categoriesLength - 1){
                     throw new InvalidAdInformations("category");
