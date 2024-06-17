@@ -17,14 +17,14 @@ public class UserService {
 
     public static void createUser(List<User> users) {
         Scanner scanner = new Scanner(System.in);
-        Integer age = null;
 
-        String[] prompt = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Pseudo (Obligatoire)",
+        Integer age = null;
+        String[] questions = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Pseudo (Obligatoire)",
                 "Mail (Obligatoire)", "Téléphone (Facultatif)", "Âge (Facultatif)" ,"Région (Obligatoire)"};
         String[] userInfos = new String[7];
 
-        for (int i = 0; i < prompt.length; i++) {
-            System.out.print(prompt[i] + " : ");
+        for (int i = 0; i < questions.length; i++) {
+            System.out.print(questions[i] + " : ");
             String input = scanner.nextLine();
             userInfos[i] = input;
         }
@@ -51,8 +51,8 @@ public class UserService {
 
     public static void updateUser(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
-        String message = "Quel utilisateur souhaitez-vous modifier ? : ";
-        int index = listAndSelectUser(users, message);
+        String prompt = "Quel utilisateur souhaitez-vous modifier ? : ";
+        int index = listAndSelectUser(users, prompt);
 
         while (true) {
             User originalUser = users.get(index);
@@ -153,8 +153,8 @@ public class UserService {
 
     public static void deleteUser(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
-        String message = "Quel utilisateur souhaitez-vous supprimer ? : ";
-        int index = listAndSelectUser(users, message);
+        String prompt = "Quel utilisateur souhaitez-vous supprimer ? : ";
+        int index = listAndSelectUser(users, prompt);
 
         User userToDelete = users.get(index);
         System.out.println("\nL'utilisateur sélectionné est :\n" + userToDelete);

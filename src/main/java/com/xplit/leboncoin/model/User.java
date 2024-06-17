@@ -117,6 +117,7 @@ public class User {
         this.region = region;
     }
 
+    //Methods
     public String toString() {
         return "\nUtilisateur\n{" +
                 "\nID: " + this.id +

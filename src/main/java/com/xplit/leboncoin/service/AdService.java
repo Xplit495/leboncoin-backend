@@ -40,12 +40,7 @@ public class AdService {
             
             System.out.print(questions[j] + " : ");
             String input = scanner.nextLine();
-
-            if (input.isEmpty()){
-                adInfos[j] = null;
-            } else {
-                adInfos[j] = input;
-            }
+            adInfos[j] = input;
         }
 
         try {
@@ -197,7 +192,7 @@ public class AdService {
 
     public static void deleteAd (List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
-        String prompt = "\nQuelle annonce souhaitez-vous supprimer ? : ";
+        String prompt = "Quelle annonce souhaitez-vous supprimer ? : ";
         int index = listAndSelectAd(ads, prompt);
 
         Ad adToDelete = ads.get(index);
@@ -245,7 +240,7 @@ public class AdService {
                 }
             }
 
-            System.out.print(prompt);
+            System.out.print('\n' + prompt);
             String input = scanner.nextLine();
             try {
                 adIndex = Integer.parseInt(input) - 1;

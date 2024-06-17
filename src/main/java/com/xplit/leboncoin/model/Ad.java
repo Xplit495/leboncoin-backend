@@ -133,6 +133,7 @@ public class Ad {
         this.publicationDate = publicationDate;
     }
 
+    //Methods
     public String toString() {
         return "\nAnnonce\n{" +
                 "\nPropriétaire: " + this.owner +
