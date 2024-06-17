@@ -5,28 +5,40 @@ import java.util.Scanner;
 import java.util.UUID;
 import com.xplit.leboncoin.util.InvalidUserInformations;
 
+/**
+ * The User class represents a user with various properties
+ * such as id, first name, last name, username, mail, phone, age, and region.
+ */
 public class User {
-    //Properties
+    // Properties
     private UUID id;
-
     private String firstName;
-
     private String lastName;
-
     private String username;
-
     private String mail;
-
     private String phone;
-
     private Integer age;
-
     private String region;
 
-    public User() {//We can think than this constructor is useless,
-                  // but it's not, it's used with Jackson
+    /**
+     * Default constructor for User.
+     * Used by Jackson for JSON serialization/deserialization.
+     */
+    public User() {
+        // Default constructor needed by Jackson
     }
 
+    /**
+     * Parameterized constructor for creating a User instance.
+     *
+     * @param firstName First name of the user
+     * @param lastName  Last name of the user
+     * @param username  Username of the user
+     * @param mail      Email of the user
+     * @param phone     Phone number of the user
+     * @param age       Age of the user
+     * @param region    Region of the user
+     */
     public User(String firstName, String lastName, String username, String mail,
                 String phone, Integer age, String region) {
         this.id = UUID.randomUUID();
@@ -39,6 +51,11 @@ public class User {
         this.region = region;
     }
 
+    /**
+     * Copy constructor for creating a User instance from an existing User.
+     *
+     * @param userToCopy User instance to copy
+     */
     public User(User userToCopy) {
         this.id = userToCopy.getId();
         this.firstName = userToCopy.getFirstName();
@@ -50,7 +67,8 @@ public class User {
         this.region = userToCopy.getRegion();
     }
 
-    //Getter and Setter
+    // Getters and Setters
+
     public UUID getId() {
         return id;
     }
@@ -117,7 +135,11 @@ public class User {
         this.region = region;
     }
 
-    //Methods
+    /**
+     * Returns a string representation of the User instance.
+     *
+     * @return String representation of the User
+     */
     public String toString() {
         return "\nUtilisateur\n{" +
                 "\nID: " + this.id +
@@ -131,6 +153,11 @@ public class User {
                 + "\n}\n";
     }
 
+    /**
+     * Returns a short string representation of the User instance.
+     *
+     * @return Short string representation of the User
+     */
     public String shortToString() {
         return "\nID: " + this.id +
                 "\nPrénom: " + this.firstName +
@@ -139,7 +166,13 @@ public class User {
                 "\nMail: " + this.mail;
     }
 
-    public void newId (Scanner scanner, List<Ad> ads) {
+    /**
+     * Generates a new UUID for the user and updates the owner ID in associated ads.
+     *
+     * @param scanner Scanner object for user input
+     * @param ads     List of ads to update
+     */
+    public void newId(Scanner scanner, List<Ad> ads) {
         System.out.println("\nPour des raisons de sécurité, l'ID ne peut pas être modifié.\nVoulez-vous en générer un nouveau à la place ?\n1. Oui\n2. Non");
         while (true) {
             System.out.print("Votre choix : ");
@@ -169,7 +202,13 @@ public class User {
         }
     }
 
-    //Validation methods
+    // Validation methods
+
+    /**
+     * Validates the User instance.
+     *
+     * @throws InvalidUserInformations if any user information is invalid
+     */
     public void isValidUser() throws InvalidUserInformations {
         isValidFirstName();
         isValidLastName();
@@ -189,7 +228,7 @@ public class User {
 
     private void isValidLastName() {
         String lastName = this.getLastName();
-        if (lastName != null && !lastName.isEmpty() && !checkType(lastName)){
+        if (lastName != null && !lastName.isEmpty() && !checkType(lastName)) {
             throw new InvalidUserInformations("last name");
         }
     }
@@ -203,38 +242,37 @@ public class User {
 
     private void isValidMail() {
         String userMail = this.getMail();
-        if (userMail == null || userMail.isEmpty() || !checkType(userMail) || !userMail.contains("@") || (!userMail.contains(".com") && !userMail.contains(".fr"))){
+        if (userMail == null || userMail.isEmpty() || !checkType(userMail) || !userMail.contains("@") || (!userMail.contains(".com") && !userMail.contains(".fr"))) {
             throw new InvalidUserInformations("mail");
         }
     }
 
     private void isValidPhone() {
         String userPhone = this.getPhone();
-        if (userPhone != null && !userPhone.isEmpty() && (checkType(userPhone) || userPhone.length() != 10 || !userPhone.startsWith("0"))){
+        if (userPhone != null && !userPhone.isEmpty() && (checkType(userPhone) || userPhone.length() != 10 || !userPhone.startsWith("0"))) {
             throw new InvalidUserInformations("phone");
         }
     }
 
     private void isValidAge() {
         Integer userAge = this.getAge();
-        if (userAge != null && (checkType(String.valueOf(userAge)) || userAge < 17 || userAge > 100)){
+        if (userAge != null && (checkType(String.valueOf(userAge)) || userAge < 17 || userAge > 100)) {
             throw new InvalidUserInformations("age");
         }
     }
 
     private void isValidRegion() {
         String userRegion = this.getRegion();
-        if (userRegion == null || userRegion.isEmpty() || !checkType(userRegion)){
-                throw new InvalidUserInformations("region");
+        if (userRegion == null || userRegion.isEmpty() || !checkType(userRegion)) {
+            throw new InvalidUserInformations("region");
         }
     }
 
-    private boolean checkType (String value) {
+    private boolean checkType(String value) {
         try {
             Integer.parseInt(value);
             return false;
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return true;
         }
     }

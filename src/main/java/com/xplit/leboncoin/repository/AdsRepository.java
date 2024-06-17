@@ -15,7 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The AdsRepository class provides methods to read ads from a JSON file
+ * and assign them to random users.
+ */
 public class AdsRepository {
+
+    /**
+     * Reads ads from a JSON file and assigns them to random users.
+     *
+     * @param path   The path to the JSON file containing the ads
+     * @param users  The list of users to randomly assign as owners of the ads
+     * @return       A list of ads read from the file
+     * @throws IOException if an I/O error occurs
+     */
     public static List<Ad> readAdsFromFile(String path, List<User> users) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(path);
@@ -34,6 +47,7 @@ public class AdsRepository {
                     ad = reader.readValue(parser);
                     ad.isValidAd();
 
+                    // Assign a random user as the owner of the ad
                     Random random = new Random();
                     int randomUser = random.nextInt(users.size());
                     ad.setOwner(users.get(randomUser).getId());
@@ -44,7 +58,7 @@ public class AdsRepository {
                 } catch (JsonParseException e) {
                     System.out.println("(Ad) Error of deserialization (Check json type) : " + e.getMessage());
                     break;
-                }catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println("(Ad) Error of deserialization (Check json type) : " + e.getMessage());
                 }
             }

@@ -12,14 +12,30 @@ import java.util.UUID;
 
 import static com.xplit.leboncoin.service.UserService.listAndSelectUser;
 
+/**
+ * The AdService class provides methods to manage advertisements.
+ */
 public class AdService {
 
+    /**
+     * Displays all ads in the list.
+     *
+     * @param ads List of advertisements to display
+     */
     public static void showAds(List<Ad> ads) {
-        for (int i = 0; i < 40; i++) {System.out.println('\n');}
+        for (int i = 0; i < 40; i++) {
+            System.out.println('\n');
+        }
         System.out.println("\nListe des annonces :");
         ads.forEach(System.out::println);
     }
 
+    /**
+     * Creates a new advertisement and adds it to the list of ads.
+     *
+     * @param users List of users to assign the ad to
+     * @param ads   List of advertisements to add the new ad to
+     */
     public static void createAd(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
 
@@ -37,7 +53,7 @@ public class AdService {
             if (j == 3) {
                 System.out.println("\nListe des catégories :\n" + Arrays.toString(Ad.categories));
             }
-            
+
             System.out.print(questions[j] + " : ");
             String input = scanner.nextLine();
             adInfos[j] = input;
@@ -49,11 +65,11 @@ public class AdService {
 
         String[] pictures = choosePictures(scanner);
 
-        Ad tempAd = new Ad (owner, adInfos[0], adInfos[1], pictures, adPrice, currentUser.getRegion(), adInfos[3] , LocalDate.now().toString());
+        Ad tempAd = new Ad(owner, adInfos[0], adInfos[1], pictures, adPrice, currentUser.getRegion(), adInfos[3], LocalDate.now().toString());
 
         try {
             tempAd.isValidAd();
-        }catch (InvalidAdInformations e) {
+        } catch (InvalidAdInformations e) {
             System.out.println(e.getMessage());
             tempAd = null;
         }
@@ -64,6 +80,12 @@ public class AdService {
         }
     }
 
+    /**
+     * Updates an existing advertisement.
+     *
+     * @param users List of users to select the owner from
+     * @param ads   List of advertisements to update
+     */
     public static void updateAd(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
         String prompt = "\nQuelle annonce souhaitez-vous modifier ? : ";
@@ -73,7 +95,7 @@ public class AdService {
             Ad originalAd = ads.get(index);
             Ad adCopy = new Ad(originalAd);
 
-            System.out.println("\nL'annonce sélectionné est :\n" + originalAd);
+            System.out.println("\nL'annonce sélectionnée est :\n" + originalAd);
             printMenu();
 
             try {
@@ -89,10 +111,10 @@ public class AdService {
                     try {
                         adCopy.isValidAd();
                         ads.set(index, adCopy);
-                        System.out.println("\nAnnonce modifié avec succès\n ");
+                        System.out.println("\nAnnonce modifiée avec succès\n");
 
-                    } catch (InvalidAdInformations e){
-                        System.out.println(e.getMessage() + "\n" + "Données invalides, aucun changement appliqué" );
+                    } catch (InvalidAdInformations e) {
+                        System.out.println(e.getMessage() + "\n" + "Données invalides, aucun changement appliqué");
                     }
                 } else {
                     System.out.println("Veuillez entrer un nombre entre 1 et 8");
@@ -103,6 +125,9 @@ public class AdService {
         }
     }
 
+    /**
+     * Prints the menu for modifying an ad.
+     */
     private static void printMenu() {
         System.out.print("""
                 Quelle information souhaitez-vous modifier ?\
@@ -129,7 +154,15 @@ public class AdService {
                 Votre choix :\s""");
     }
 
-    private static void processInput(int input, Ad adCopy, List<User> users ,Scanner scanner) {
+    /**
+     * Processes the user input for updating the ad.
+     *
+     * @param input   The user input
+     * @param adCopy  The ad to update
+     * @param users   The list of users
+     * @param scanner The scanner for user input
+     */
+    private static void processInput(int input, Ad adCopy, List<User> users, Scanner scanner) {
         switch (input) {
             case 1 -> adCopy.setOwner(newOwner(users));
             case 2 -> adCopy.setTitle(getInput(scanner, "\nNouveau titre : "));
@@ -142,16 +175,35 @@ public class AdService {
         }
     }
 
+    /**
+     * Gets input from the user.
+     *
+     * @param scanner The scanner for user input
+     * @param prompt  The prompt to display to the user
+     * @return The user input
+     */
     private static String getInput(Scanner scanner, String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
-    private static UUID newOwner (List<User> users) {
+    /**
+     * Selects a new owner for the ad from the list of users.
+     *
+     * @param users The list of users
+     * @return The UUID of the new owner
+     */
+    private static UUID newOwner(List<User> users) {
         String prompt = "À quel utilisateur souhaitez vous attribuer cette annonce ? : ";
         return users.get(listAndSelectUser(users, prompt)).getId();
     }
 
+    /**
+     * Gets a valid price input from the user.
+     *
+     * @param scanner The scanner for user input
+     * @return The valid price input
+     */
     private static Integer getValidPrice(Scanner scanner) {
         while (true) {
             System.out.print("\nNouveau prix (sans €) : ");
@@ -165,10 +217,16 @@ public class AdService {
         }
     }
 
-    private static String[] choosePictures (Scanner scanner) {
+    /**
+     * Chooses pictures for the ad.
+     *
+     * @param scanner The scanner for user input
+     * @return The array of picture URLs
+     */
+    private static String[] choosePictures(Scanner scanner) {
         String[] pictures;
 
-        while (true){
+        while (true) {
             System.out.print("Combien de photos souhaitez-vous ajouter à votre annonce ? (1 Min / 5 Max) : ");
             String input = scanner.nextLine();
             try {
@@ -190,13 +248,18 @@ public class AdService {
         return pictures;
     }
 
-    public static void deleteAd (List<Ad> ads) {
+    /**
+     * Deletes an advertisement from the list.
+     *
+     * @param ads List of advertisements to delete from
+     */
+    public static void deleteAd(List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
         String prompt = "Quelle annonce souhaitez-vous supprimer ? : ";
         int index = listAndSelectAd(ads, prompt);
 
         Ad adToDelete = ads.get(index);
-        System.out.println("\nL'annonce sélectionné est :\n" + adToDelete);
+        System.out.println("\nL'annonce sélectionnée est :\n" + adToDelete);
 
         System.out.println("Voulez-vous vraiment supprimer cette annonce ?\n1. Oui\n2. Non");
         while (true) {
@@ -207,22 +270,28 @@ public class AdService {
                 if (choice == 1 || choice == 2) {
                     if (choice == 1) {
                         ads.remove(index);
-                        System.out.println("\nAnnonce supprimé avec succès\n");
+                        System.out.println("\nAnnonce supprimée avec succès\n");
                     } else {
                         System.out.println("\nSuppression annulée\n");
                     }
                     break;
                 } else {
-                    System.out.println("Veuillez entrer 1 ou" + " 2");
+                    System.out.println("Veuillez entrer 1 ou 2");
                 }
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Veuillez entrer un nombre entier");
             }
         }
     }
 
-    private static int listAndSelectAd (List<Ad> ads, String prompt) {
+    /**
+     * Lists and selects an advertisement from the list.
+     *
+     * @param ads    List of advertisements to select from
+     * @param prompt The prompt to display to the user
+     * @return The index of the selected advertisement
+     */
+    private static int listAndSelectAd(List<Ad> ads, String prompt) {
         Scanner scanner = new Scanner(System.in);
 
         int adIndex;
@@ -256,6 +325,5 @@ public class AdService {
         }
         return adIndex;
     }
-
 
 }

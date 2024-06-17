@@ -14,7 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The UsersRepository class provides methods to read users from a JSON file.
+ */
 public class UsersRepository {
+
+    /**
+     * Reads users from a JSON file.
+     *
+     * @param path The path to the JSON file containing the users
+     * @return     A list of users read from the file
+     * @throws IOException if an I/O error occurs
+     */
     public static List<User> readUsersFromFile(String path) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(path);
@@ -33,12 +44,13 @@ public class UsersRepository {
                     user = reader.readValue(parser);
                     user.isValidUser();
 
+                    // Assign a new UUID to the user
                     user.setId(UUID.randomUUID());
 
                     users.add(user);
                 } catch (InvalidUserInformations e) {
                     System.out.println(e.getMessage() + user);
-                }  catch (JsonParseException e) {
+                } catch (JsonParseException e) {
                     System.out.println("(User) Error of deserialization (Check json type) : " + e.getMessage());
                     break;
                 } catch (Exception e) {

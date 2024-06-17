@@ -7,20 +7,35 @@ import com.xplit.leboncoin.util.InvalidUserInformations;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The UserService class provides methods to manage users.
+ */
 public class UserService {
 
+    /**
+     * Displays all users in the list.
+     *
+     * @param users List of users to display
+     */
     public static void showUsers(List<User> users) {
-        for (int i = 0; i < 40; i++) {System.out.println('\n');}
+        for (int i = 0; i < 40; i++) {
+            System.out.println('\n');
+        }
         System.out.println("\nListe des utilisateurs :");
         users.forEach(System.out::println);
     }
 
+    /**
+     * Creates a new user and adds it to the list of users.
+     *
+     * @param users List of users to add the new user to
+     */
     public static void createUser(List<User> users) {
         Scanner scanner = new Scanner(System.in);
 
         Integer age = null;
         String[] questions = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Pseudo (Obligatoire)",
-                "Mail (Obligatoire)", "Téléphone (Facultatif)", "Âge (Facultatif)" ,"Région (Obligatoire)"};
+                "Mail (Obligatoire)", "Téléphone (Facultatif)", "Âge (Facultatif)", "Région (Obligatoire)"};
         String[] userInfos = new String[7];
 
         for (int i = 0; i < questions.length; i++) {
@@ -33,11 +48,11 @@ public class UserService {
             age = Integer.parseInt(userInfos[5]);
         } catch (NumberFormatException ignored) {}
 
-        User tempUser = new User (userInfos[0], userInfos[1], userInfos[2], userInfos[3], userInfos[4], age, userInfos[6]);
+        User tempUser = new User(userInfos[0], userInfos[1], userInfos[2], userInfos[3], userInfos[4], age, userInfos[6]);
 
         try {
             tempUser.isValidUser();
-        }catch (InvalidUserInformations e) {
+        } catch (InvalidUserInformations e) {
             System.out.println(e.getMessage());
             tempUser = null;
         }
@@ -46,9 +61,14 @@ public class UserService {
             System.out.println("\nUtilisateur créé avec succès");
             users.add(tempUser);
         }
-
     }
 
+    /**
+     * Updates an existing user.
+     *
+     * @param users List of users to update
+     * @param ads   List of advertisements associated with the users
+     */
     public static void updateUser(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
         String prompt = "Quel utilisateur souhaitez-vous modifier ? : ";
@@ -81,7 +101,7 @@ public class UserService {
                     try {
                         userCopy.isValidUser();
                         users.set(index, userCopy);
-                        System.out.println("\nUtilisateur modifié avec succès\n ");
+                        System.out.println("\nUtilisateur modifié avec succès\n");
 
                     } catch (InvalidUserInformations e) {
                         System.out.println(e.getMessage() + "\n" + "Données invalides, aucun changement appliqué");
@@ -95,6 +115,9 @@ public class UserService {
         }
     }
 
+    /**
+     * Prints the menu for modifying a user.
+     */
     private static void printMenu() {
         System.out.print("""
                 Quelle information souhaitez-vous modifier ?\
@@ -121,6 +144,13 @@ public class UserService {
                 Votre choix :\s""");
     }
 
+    /**
+     * Processes the user input for updating the user.
+     *
+     * @param input    The user input
+     * @param userCopy The user to update
+     * @param scanner  The scanner for user input
+     */
     private static void processInput(int input, User userCopy, Scanner scanner) {
         switch (input) {
             case 2 -> userCopy.setFirstName(getInput(scanner, "\nNouveau prénom : "));
@@ -133,11 +163,24 @@ public class UserService {
         }
     }
 
+    /**
+     * Gets input from the user.
+     *
+     * @param scanner The scanner for user input
+     * @param prompt  The prompt to display to the user
+     * @return The user input
+     */
     private static String getInput(Scanner scanner, String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
+    /**
+     * Gets a valid age input from the user.
+     *
+     * @param scanner The scanner for user input
+     * @return The valid age input
+     */
     private static Integer getValidAge(Scanner scanner) {
         while (true) {
             System.out.print("\nNouvel âge : ");
@@ -151,6 +194,12 @@ public class UserService {
         }
     }
 
+    /**
+     * Deletes a user and their ads from the list.
+     *
+     * @param users List of users to delete from
+     * @param ads   List of advertisements to delete
+     */
     public static void deleteUser(List<User> users, List<Ad> ads) {
         Scanner scanner = new Scanner(System.in);
         String prompt = "Quel utilisateur souhaitez-vous supprimer ? : ";
@@ -159,7 +208,7 @@ public class UserService {
         User userToDelete = users.get(index);
         System.out.println("\nL'utilisateur sélectionné est :\n" + userToDelete);
 
-        System.out.println("Voulez-vous vraiment supprimer cet utilisateur et toutes ces annonces ?\n1. Oui\n2. Non");
+        System.out.println("Voulez-vous vraiment supprimer cet utilisateur et toutes ses annonces ?\n1. Oui\n2. Non");
         while (true) {
             System.out.print("Votre choix : ");
             String input = scanner.nextLine();
@@ -183,7 +232,14 @@ public class UserService {
         }
     }
 
-    public static int listAndSelectUser (List<User> users, String prompt) {
+    /**
+     * Lists and selects a user from the list.
+     *
+     * @param users  List of users to select from
+     * @param prompt The prompt to display to the user
+     * @return The index of the selected user
+     */
+    public static int listAndSelectUser(List<User> users, String prompt) {
         Scanner scanner = new Scanner(System.in);
 
         int userIndex;
