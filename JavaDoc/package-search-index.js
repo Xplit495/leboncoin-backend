@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.xplit.leboncoin"},{"l":"com.xplit.leboncoin.model"},{"l":"com.xplit.leboncoin.repository"},{"l":"com.xplit.leboncoin.service"},{"l":"com.xplit.leboncoin.util"}];updateSearchResults();

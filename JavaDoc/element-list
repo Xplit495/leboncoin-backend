@@ -1,0 +1,5 @@
+com.xplit.leboncoin
+com.xplit.leboncoin.model
+com.xplit.leboncoin.repository
+com.xplit.leboncoin.service
+com.xplit.leboncoin.util
