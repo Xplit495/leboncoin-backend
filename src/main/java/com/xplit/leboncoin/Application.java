@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * @author Xplit495
+ * @version 1.0
  * The Application class is the entry point for the Leboncoin backend simulation.
  * It initializes data and handles user input to perform various operations such as
  * viewing, creating, updating, and deleting users and ads.
