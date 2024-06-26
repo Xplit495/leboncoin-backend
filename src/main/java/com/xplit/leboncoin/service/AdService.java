@@ -36,11 +36,9 @@ public class AdService {
      * @param users List of users to assign the ad to
      * @param ads   List of advertisements to add the new ad to
      */
-    public static void createAd(List<User> users, List<Ad> ads) {
-        Scanner scanner = new Scanner(System.in);
-
+    public static void createAd(Scanner scanner, List<User> users, List<Ad> ads) {
         String prompt = "À quel utilisateur souhaitez vous attribuer cette annonce ? : ";
-        int index = listAndSelectUser(users, prompt);
+        int index = listAndSelectUser(scanner, users, prompt);
         UUID owner = users.get(index).getId();
         User currentUser = users.get(index);
 
@@ -86,10 +84,9 @@ public class AdService {
      * @param users List of users to select the owner from
      * @param ads   List of advertisements to update
      */
-    public static void updateAd(List<User> users, List<Ad> ads) {
-        Scanner scanner = new Scanner(System.in);
+    public static void updateAd(Scanner scanner, List<User> users, List<Ad> ads) {
         String prompt = "\nQuelle annonce souhaitez-vous modifier ? : ";
-        int index = listAndSelectAd(ads, prompt);
+        int index = listAndSelectAd(scanner, ads, prompt);
 
         while (true) {
             Ad originalAd = ads.get(index);
@@ -106,7 +103,7 @@ public class AdService {
                 }
 
                 if (input >= 1 && input <= 8) {
-                    processInput(input, adCopy, users, scanner);
+                    processInput(scanner, users, adCopy ,input);
 
                     try {
                         adCopy.isValidAd();
@@ -162,9 +159,9 @@ public class AdService {
      * @param users   The list of users
      * @param scanner The scanner for user input
      */
-    private static void processInput(int input, Ad adCopy, List<User> users, Scanner scanner) {
+    private static void processInput(Scanner scanner, List<User> users, Ad adCopy, int input) {
         switch (input) {
-            case 1 -> adCopy.setOwner(newOwner(users));
+            case 1 -> adCopy.setOwner(newOwner(scanner, users));
             case 2 -> adCopy.setTitle(getInput(scanner, "\nNouveau titre : "));
             case 3 -> adCopy.setDescription(getInput(scanner, "\nNouvelle description : "));
             case 4 -> adCopy.setPictures(choosePictures(scanner));
@@ -193,9 +190,9 @@ public class AdService {
      * @param users The list of users
      * @return The UUID of the new owner
      */
-    private static UUID newOwner(List<User> users) {
+    private static UUID newOwner(Scanner scanner, List<User> users) {
         String prompt = "À quel utilisateur souhaitez vous attribuer cette annonce ? : ";
-        return users.get(listAndSelectUser(users, prompt)).getId();
+        return users.get(listAndSelectUser(scanner, users, prompt)).getId();
     }
 
     /**
@@ -253,10 +250,9 @@ public class AdService {
      *
      * @param ads List of advertisements to delete from
      */
-    public static void deleteAd(List<Ad> ads) {
-        Scanner scanner = new Scanner(System.in);
+    public static void deleteAd(Scanner scanner, List<Ad> ads) {
         String prompt = "Quelle annonce souhaitez-vous supprimer ? : ";
-        int index = listAndSelectAd(ads, prompt);
+        int index = listAndSelectAd(scanner, ads, prompt);
 
         Ad adToDelete = ads.get(index);
         System.out.println("\nL'annonce sélectionnée est :\n" + adToDelete);
@@ -291,9 +287,7 @@ public class AdService {
      * @param prompt The prompt to display to the user
      * @return The index of the selected advertisement
      */
-    private static int listAndSelectAd(List<Ad> ads, String prompt) {
-        Scanner scanner = new Scanner(System.in);
-
+    private static int listAndSelectAd(Scanner scanner, List<Ad> ads, String prompt) {
         int adIndex;
         boolean repetition = true;
 

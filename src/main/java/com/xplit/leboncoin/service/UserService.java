@@ -30,9 +30,7 @@ public class UserService {
      *
      * @param users List of users to add the new user to
      */
-    public static void createUser(List<User> users) {
-        Scanner scanner = new Scanner(System.in);
-
+    public static void createUser(Scanner scanner, List<User> users) {
         Integer age = null;
         String[] questions = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Pseudo (Obligatoire)",
                 "Mail (Obligatoire)", "Téléphone (Facultatif)", "Âge (Facultatif)", "Région (Obligatoire)"};
@@ -69,10 +67,9 @@ public class UserService {
      * @param users List of users to update
      * @param ads   List of advertisements associated with the users
      */
-    public static void updateUser(List<User> users, List<Ad> ads) {
-        Scanner scanner = new Scanner(System.in);
+    public static void updateUser(Scanner scanner, List<User> users, List<Ad> ads) {
         String prompt = "Quel utilisateur souhaitez-vous modifier ? : ";
-        int index = listAndSelectUser(users, prompt);
+        int index = listAndSelectUser(scanner, users, prompt);
 
         while (true) {
             User originalUser = users.get(index);
@@ -200,10 +197,9 @@ public class UserService {
      * @param users List of users to delete from
      * @param ads   List of advertisements to delete
      */
-    public static void deleteUser(List<User> users, List<Ad> ads) {
-        Scanner scanner = new Scanner(System.in);
+    public static void deleteUser(Scanner scanner, List<User> users, List<Ad> ads) {
         String prompt = "Quel utilisateur souhaitez-vous supprimer ? : ";
-        int index = listAndSelectUser(users, prompt);
+        int index = listAndSelectUser(scanner, users, prompt);
 
         User userToDelete = users.get(index);
         System.out.println("\nL'utilisateur sélectionné est :\n" + userToDelete);
@@ -239,9 +235,7 @@ public class UserService {
      * @param prompt The prompt to display to the user
      * @return The index of the selected user
      */
-    public static int listAndSelectUser(List<User> users, String prompt) {
-        Scanner scanner = new Scanner(System.in);
-
+    public static int listAndSelectUser(Scanner scanner, List<User> users, String prompt) {
         int userIndex;
         boolean repetition = true;
 
