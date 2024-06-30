@@ -11,7 +11,20 @@ import com.xplit.leboncoin.util.TerminalColor;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The AdminMode class provides the functionality for running the application in admin mode.
+ * It allows the admin to view and manage users and ads, create new users and ads, update user profiles and ads, and delete accounts and ads.
+ *
+ * @version 1.0
+ */
 public class AdminMode {
+
+    /**
+     * Runs the application in admin mode, allowing the admin to interact with the system.
+     *
+     * @param scanner the Scanner object for admin input
+     * @param users the list of users
+     */
     public static void runAdmin(Scanner scanner, List<User> users) {
         if (users.isEmpty()) {
             System.out.println("Aucun utilisateur n'a été trouvé");
@@ -54,11 +67,9 @@ public class AdminMode {
                 } else {
                     System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entre 1 et 9" + TerminalColor.RESET);
                 }
-
             } catch (NumberFormatException ignored) {
                 System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre" + TerminalColor.RESET);
             }
         }
     }
-
 }

@@ -9,8 +9,20 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * The UtilUser class provides utility methods for managing users and their ads,
+ * including assigning ads to users, displaying user information, and processing user input.
+ *
+ * @version 1.0
+ */
 public class UtilUser {
 
+    /**
+     * Assigns ads to users based on the owner ID.
+     *
+     * @param users the list of users
+     * @param ads the list of ads
+     */
     public static void assignAdsToUser(List<User> users, List<Ad> ads) {
         List<Ad> remainingAds = new ArrayList<>(ads);
         for (User user : users) {
@@ -21,11 +33,18 @@ public class UtilUser {
                     assignedAds.add(ad);
                 }
             }
-
             remainingAds.removeAll(assignedAds);
         }
     }
 
+    /**
+     * Prompts the user to select a user from a list and returns the selected user's index.
+     *
+     * @param scanner the Scanner object for user input
+     * @param users the list of users
+     * @param prompt the prompt to display to the user
+     * @return the index of the selected user
+     */
     public static int fetchAndChooseUser(Scanner scanner, List<User> users, String prompt) {
         boolean repetition = true;
 
@@ -57,6 +76,11 @@ public class UtilUser {
         }
     }
 
+    /**
+     * Displays a list of all users.
+     *
+     * @param users the list of users
+     */
     public static void showUsers(List<User> users) {
         for (int i = 0; i < 40; i++) {
             System.out.println('\n');
@@ -70,56 +94,51 @@ public class UtilUser {
         }
     }
 
+    /**
+     * Prints the admin menu for modifying user information.
+     */
     public static void printAdminMenu() {
         System.out.print("\n\n" + """
-                Quelle information souhaitez-vous modifier ?\
-
-                1. ID\
-
-                2. Prénom\
-
-                3. Nom\
-
-                4. Pseudo\
-
-                5. Mail\
-
-                6. Téléphone\
-
-                7. Âge\
-
-                8. Région\
-
-                9. Quitter\
-
+                Quelle information souhaitez-vous modifier ?
+                1. ID
+                2. Prénom
+                3. Nom
+                4. Pseudo
+                5. Mail
+                6. Téléphone
+                7. Âge
+                8. Région
+                9. Quitter
 
                 Votre choix :\s""");
     }
 
+    /**
+     * Prints the user menu for modifying their own information.
+     */
     public static void printUserMenu() {
         System.out.print("\n\n" + """
-                Quelle information souhaitez-vous modifier ?\
-
-                1. Prénom\
-
-                2. Nom\
-
-                3. Pseudo\
-
-                4. Mail\
-
-                5. Téléphone\
-
-                6. Âge\
-
-                7. Région\
-
-                8. Quitter\
-
+                Quelle information souhaitez-vous modifier ?
+                1. Prénom
+                2. Nom
+                3. Pseudo
+                4. Mail
+                5. Téléphone
+                6. Âge
+                7. Région
+                8. Quitter
 
                 Votre choix :\s""");
     }
 
+    /**
+     * Prompts the user to decide if they want to generate a new ID.
+     * If the user chooses to generate a new ID, it updates the user's ID and their ads' owner ID.
+     *
+     * @param scanner the Scanner object for user input
+     * @param selectedUser the user to update the ID for
+     * @return true if a new ID was generated, false otherwise
+     */
     public static boolean newId(Scanner scanner, User selectedUser) {
         System.out.println("\nPour des raisons de sécurité, l'ID ne peut pas être modifié.\nVoulez-vous en générer un nouveau à la place ?\n1. Oui\n2. Non");
         while (true) {
@@ -148,6 +167,14 @@ public class UtilUser {
         }
     }
 
+    /**
+     * Processes the user's input for updating their profile information.
+     *
+     * @param input the input choice
+     * @param userCopy the user object to update
+     * @param scanner the Scanner object for user input
+     * @param isAdmin true if the operation is performed by an admin, false otherwise
+     */
     public static void processInput(int input, User userCopy, Scanner scanner, boolean isAdmin) {
         if (isAdmin && input == 1) {
             return;
@@ -169,11 +196,24 @@ public class UtilUser {
         }
     }
 
+    /**
+     * Prompts the user for input with the specified prompt.
+     *
+     * @param scanner the Scanner object for user input
+     * @param prompt the prompt to display to the user
+     * @return the user's input
+     */
     private static String getInput(Scanner scanner, String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
+    /**
+     * Prompts the user for a valid age input.
+     *
+     * @param scanner the Scanner object for user input
+     * @return the valid age input
+     */
     private static Integer getValidAge(Scanner scanner) {
         while (true) {
             System.out.print("\nNouvel âge : ");
@@ -186,5 +226,4 @@ public class UtilUser {
             }
         }
     }
-
 }

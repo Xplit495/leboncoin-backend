@@ -10,7 +10,20 @@ import com.xplit.leboncoin.util.TerminalColor;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The UserMode class provides the functionality for running the application in user mode.
+ * It allows the user to view and manage ads, update their profile, and delete their account.
+ *
+ * @version 1.0
+ */
 public class UserMode {
+
+    /**
+     * Runs the application in user mode, allowing the user to interact with the system.
+     *
+     * @param scanner the Scanner object for user input
+     * @param users the list of users
+     */
     public static void runUser(Scanner scanner, List<User> users) {
         if (users.isEmpty()) {
             System.out.println("Aucun utilisateur n'a été trouvé");
@@ -38,6 +51,7 @@ public class UserMode {
                     8. Se déconnecter
 
                     Votre choix :\s""");
+
             try {
                 input = Integer.parseInt(scanner.nextLine());
                 if (input >= 1 && input <= 8) {
@@ -65,7 +79,5 @@ public class UserMode {
                 System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre valide" + TerminalColor.RESET);
             }
         }
-
     }
-
 }

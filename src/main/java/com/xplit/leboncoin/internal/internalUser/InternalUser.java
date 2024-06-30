@@ -8,28 +8,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The InternalUser class provides internal methods for managing users,
+ * including creating, updating, and deleting user profiles.
+ *
+ * @version 1.0
+ */
 public class InternalUser {
 
+    /**
+     * Creates a new user based on input from the scanner and adds it to the list of users.
+     *
+     * @param scanner the Scanner object for user input
+     * @param users the list of users to add the new user to
+     */
     public static void createUserInternal(Scanner scanner, List<User> users) {
         Integer age = null;
         String[] questions = {"Prénom (Obligatoire)", "Nom (Facultatif)", "Pseudo (Obligatoire)",
                 "Mail (Obligatoire)", "Téléphone (Facultatif)", "Âge (Facultatif)", "Région (Obligatoire)"};
         String[] userInfos = new String[7];
 
+        // Collect user information from input
         for (int i = 0; i < questions.length; i++) {
             System.out.print(questions[i] + " : ");
             String input = scanner.nextLine();
             userInfos[i] = input;
         }
 
+        // Parse age if possible
         try {
             age = Integer.parseInt(userInfos[5]);
         } catch (NumberFormatException ignored) {
         }
 
+        // Create a temporary user with the collected information
         User tempUser = new User(userInfos[0], userInfos[1], userInfos[2],
                 userInfos[3], userInfos[4], age, userInfos[6], new ArrayList<>());
 
+        // Validate the temporary user
         try {
             tempUser.isValidUser();
         } catch (InvalidUserInformations e) {
@@ -37,12 +53,23 @@ public class InternalUser {
             tempUser = null;
         }
 
+        // Add the user to the list if valid
         if (tempUser != null) {
             System.out.println(TerminalColor.GREEN + "\nUtilisateur créé avec succès" + TerminalColor.RESET);
             users.add(tempUser);
         }
     }
 
+    /**
+     * Updates the profile of a selected user based on input from the scanner.
+     *
+     * @param scanner the Scanner object for user input
+     * @param users the list of users
+     * @param selectedUser the user to update
+     * @param userCopy a copy of the user to update
+     * @param index the index of the user in the list
+     * @param isAdmin true if the update is performed by an admin, false otherwise
+     */
     public static void updateProfileInternal(Scanner scanner, List<User> users, User selectedUser, User userCopy, Integer index, boolean isAdmin) {
         while (true) {
             System.out.println(TerminalColor.YELLOW + "\nL'utilisateur est :\n" + TerminalColor.RESET + userCopy);
@@ -91,6 +118,13 @@ public class InternalUser {
         }
     }
 
+    /**
+     * Deletes a user from the list of users based on input from the scanner.
+     *
+     * @param scanner the Scanner object for user input
+     * @param users the list of users
+     * @param index the index of the user to delete
+     */
     public static void deleteUserInternal(Scanner scanner, List<User> users, int index) {
         System.out.println("\nVoulez-vous vraiment supprimer ce compte et toutes les annonces qui lui sont associée(s) ?\n1. Oui\n2. Non");
 
@@ -115,5 +149,4 @@ public class InternalUser {
             }
         }
     }
-
 }

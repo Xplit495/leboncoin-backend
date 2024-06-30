@@ -1,5 +1,9 @@
 com.xplit.leboncoin
+com.xplit.leboncoin.authorization
+com.xplit.leboncoin.internal.internalAd
+com.xplit.leboncoin.internal.internalUser
 com.xplit.leboncoin.model
 com.xplit.leboncoin.repository
-com.xplit.leboncoin.service
+com.xplit.leboncoin.service.admin
+com.xplit.leboncoin.service.user
 com.xplit.leboncoin.util

@@ -8,6 +8,12 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.UUID;
 
+/**
+ * The Ad class represents an advertisement in the Leboncoin application.
+ * It contains details about the ad and provides methods for ad validation.
+ *
+ * @version 1.0
+ */
 public class Ad {
     // Properties
     private UUID owner;
@@ -18,6 +24,7 @@ public class Ad {
     private String region;
     private String category;
     private String publicationDate;
+
     public static final String[] categories = {
             "Véhicules",
             "Immobilier",
@@ -33,10 +40,25 @@ public class Ad {
             "Electroménager",
     };
 
+    /**
+     * Default constructor needed by Jackson.
+     */
     public Ad() {
         // Default constructor needed by Jackson
     }
 
+    /**
+     * Constructs a new Ad with the specified details.
+     *
+     * @param owner the UUID of the ad owner
+     * @param title the title of the ad
+     * @param description the description of the ad
+     * @param pictures an array of picture filenames for the ad
+     * @param price the price of the ad
+     * @param region the region where the ad is located
+     * @param category the category of the ad
+     * @param publicationDate the publication date of the ad
+     */
     public Ad(UUID owner, String title, String description, String[] pictures, Integer price,
               String region, String category, String publicationDate) {
         this.owner = owner;
@@ -49,6 +71,11 @@ public class Ad {
         this.publicationDate = publicationDate;
     }
 
+    /**
+     * Constructs a new Ad by copying details from another ad.
+     *
+     * @param adToCopy the ad to copy details from
+     */
     public Ad(Ad adToCopy) {
         this.owner = adToCopy.getOwner();
         this.title = adToCopy.getTitle();
@@ -61,70 +88,156 @@ public class Ad {
     }
 
     // Getters and Setters
+
+    /**
+     * Returns the UUID of the ad owner.
+     *
+     * @return the UUID of the ad owner
+     */
     public UUID getOwner() {
         return owner;
     }
 
+    /**
+     * Sets the UUID of the ad owner.
+     *
+     * @param toUserId the new UUID of the ad owner
+     */
     public void setOwner(UUID toUserId) {
         this.owner = toUserId;
     }
 
+    /**
+     * Returns the title of the ad.
+     *
+     * @return the title of the ad
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets the title of the ad.
+     *
+     * @param title the new title of the ad
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Returns the description of the ad.
+     *
+     * @return the description of the ad
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the description of the ad.
+     *
+     * @param description the new description of the ad
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Returns the array of picture filenames for the ad.
+     *
+     * @return the array of picture filenames for the ad
+     */
     public String[] getPictures() {
         return pictures;
     }
 
+    /**
+     * Sets the array of picture filenames for the ad.
+     *
+     * @param pictures the new array of picture filenames for the ad
+     */
     public void setPictures(String[] pictures) {
         this.pictures = pictures;
     }
 
+    /**
+     * Returns the price of the ad.
+     *
+     * @return the price of the ad
+     */
     public Integer getPrice() {
         return price;
     }
 
+    /**
+     * Sets the price of the ad.
+     *
+     * @param price the new price of the ad
+     */
     public void setPrice(Integer price) {
         this.price = price;
     }
 
+    /**
+     * Returns the region where the ad is located.
+     *
+     * @return the region where the ad is located
+     */
     public String getRegion() {
         return region;
     }
 
+    /**
+     * Sets the region where the ad is located.
+     *
+     * @param region the new region where the ad is located
+     */
     public void setRegion(String region) {
         this.region = region;
     }
 
+    /**
+     * Returns the category of the ad.
+     *
+     * @return the category of the ad
+     */
     public String getCategory() {
         return category;
     }
 
+    /**
+     * Sets the category of the ad.
+     *
+     * @param category the new category of the ad
+     */
     public void setCategory(String category) {
         this.category = category;
     }
 
+    /**
+     * Returns the publication date of the ad.
+     *
+     * @return the publication date of the ad
+     */
     public String getPublicationDate() {
         return publicationDate;
     }
 
+    /**
+     * Sets the publication date of the ad.
+     *
+     * @param publicationDate the new publication date of the ad
+     */
     public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 
+    /**
+     * Returns a string representation of the ad.
+     *
+     * @return a string representation of the ad
+     */
     public String toString() {
         return "Propriétaire: " + this.owner +
                 "\nTitre: " + this.title +
@@ -137,6 +250,11 @@ public class Ad {
                 "\n";
     }
 
+    /**
+     * Returns a short string representation of the ad.
+     *
+     * @return a short string representation of the ad
+     */
     public String shortToString() {
         return "\nPropriétaire: " + this.owner +
                 "\nTitre: " + this.title +
@@ -147,6 +265,12 @@ public class Ad {
     }
 
     // Validation methods
+
+    /**
+     * Validates the ad details. Throws InvalidAdInformations if any details are invalid.
+     *
+     * @throws InvalidAdInformations if any ad details are invalid
+     */
     public void isValidAd() throws InvalidAdInformations {
         isValidTitle();
         isValidDescription();
@@ -157,6 +281,9 @@ public class Ad {
         isValidPublicationDate();
     }
 
+    /**
+     * Validates the title of the ad. Throws InvalidAdInformations if invalid.
+     */
     private void isValidTitle() {
         String adTitle = this.getTitle();
         if (adTitle == null || adTitle.isEmpty() || !checkType(adTitle)) {
@@ -164,6 +291,9 @@ public class Ad {
         }
     }
 
+    /**
+     * Validates the description of the ad. Throws InvalidAdInformations if invalid.
+     */
     private void isValidDescription() {
         String adDescription = this.getDescription();
         if (adDescription == null || adDescription.isEmpty() || !checkType(adDescription)) {
@@ -171,6 +301,9 @@ public class Ad {
         }
     }
 
+    /**
+     * Validates the pictures of the ad. Throws InvalidAdInformations if invalid.
+     */
     private void isValidPictures() {
         String[] adPictures = this.getPictures();
         if (adPictures == null || adPictures.length == 0) {
@@ -184,6 +317,9 @@ public class Ad {
         }
     }
 
+    /**
+     * Validates the price of the ad. Throws InvalidAdInformations if invalid.
+     */
     private void isValidPrice() {
         Integer adPrice = this.getPrice();
         if (adPrice == null || checkType(String.valueOf(adPrice)) || adPrice < 0 || adPrice >= 10000) {
@@ -191,6 +327,9 @@ public class Ad {
         }
     }
 
+    /**
+     * Validates the region of the ad. Throws InvalidAdInformations if invalid.
+     */
     private void isValidRegion() {
         String adRegion = this.getRegion();
         if (adRegion == null || adRegion.isEmpty() || !checkType(adRegion)) {
@@ -198,6 +337,9 @@ public class Ad {
         }
     }
 
+    /**
+     * Validates the category of the ad. Throws InvalidAdInformations if invalid.
+     */
     private void isValidCategory() {
         String adCategory = this.getCategory();
         if (adCategory == null || adCategory.isEmpty() || !checkType(adCategory)) {
@@ -216,6 +358,9 @@ public class Ad {
         }
     }
 
+    /**
+     * Validates the publication date of the ad. Throws InvalidAdInformations if invalid.
+     */
     private void isValidPublicationDate() {
         String adPublicationDate = this.getPublicationDate();
         if (adPublicationDate == null || adPublicationDate.length() != 10) {
@@ -236,6 +381,12 @@ public class Ad {
         }
     }
 
+    /**
+     * Checks if the given value is of valid type (not a number).
+     *
+     * @param value the value to check
+     * @return true if the value is a valid type, false if it is a number
+     */
     private boolean checkType(String value) {
         try {
             Integer.parseInt(value);
@@ -244,5 +395,4 @@ public class Ad {
             return true;
         }
     }
-
 }
