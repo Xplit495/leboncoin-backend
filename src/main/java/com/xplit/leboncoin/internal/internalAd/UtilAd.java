@@ -139,7 +139,7 @@ public class UtilAd {
 
                  8. Date de publication\
 
-                 9. Quitter
+                 9. Quitter\
 
 
                 Votre choix :\s""");
