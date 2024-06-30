@@ -3,223 +3,275 @@ package com.xplit.leboncoin.service;
 import com.xplit.leboncoin.model.Ad;
 import com.xplit.leboncoin.model.User;
 import com.xplit.leboncoin.util.InvalidAdInformations;
+import com.xplit.leboncoin.util.TerminalColor;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 import static com.xplit.leboncoin.service.UserService.listAndSelectUser;
 
-/**
- * The AdService class provides methods to manage advertisements.
- */
 public class AdService {
 
-    /**
-     * Displays all ads in the list.
-     *
-     * @param ads List of advertisements to display
-     */
-    public static void showAds(List<Ad> ads) {
+    public static void showAds(List<User> users) {
         for (int i = 0; i < 40; i++) {
             System.out.println('\n');
         }
-        System.out.println("\nListe des annonces :");
-        ads.forEach(System.out::println);
+
+        System.out.println(TerminalColor.YELLOW + "\nListe des annonces :" + TerminalColor.RESET);
+        for (User user : users) {
+            for (Ad ad : user.getAds()) {
+                System.out.println("\n====================================================================================");
+                System.out.print(ad);
+                System.out.print("====================================================================================\n\n");
+            }
+        }
     }
 
-    /**
-     * Creates a new advertisement and adds it to the list of ads.
-     *
-     * @param users List of users to assign the ad to
-     * @param ads   List of advertisements to add the new ad to
-     */
-    public static void createAd(Scanner scanner, List<User> users, List<Ad> ads) {
+    public static void showSelectedUserAds(User selectedUser) {
+        for (int i = 0; i < 40; i++) {
+            System.out.println('\n');
+        }
+
+        System.out.println(TerminalColor.YELLOW + "\nListe de vos annonces :" + TerminalColor.RESET);
+        if (selectedUser.getAds().isEmpty()) {
+            System.out.println(TerminalColor.RED + "\nAucune" + TerminalColor.RESET);
+        } else {
+            for (Ad ad : selectedUser.getAds()) {
+                System.out.println("\n====================================================================================");
+                System.out.print(ad);
+                System.out.print("====================================================================================\n\n");
+            }
+        }
+    }
+
+    public static void adminCreateAd(Scanner scanner, List<User> users) {
         String prompt = "À quel utilisateur souhaitez vous attribuer cette annonce ? : ";
         int index = listAndSelectUser(scanner, users, prompt);
-        UUID owner = users.get(index).getId();
-        User currentUser = users.get(index);
+        User selectedUser = users.get(index);
+
+        createAdInternal(scanner, selectedUser);
+    }
+
+    public static void userCreateAd(Scanner scanner, User selectedUser) { // This method is useless (she can be call directly from UserMode) but render the code more readable
+        createAdInternal(scanner, selectedUser);
+    }
+
+    private static void createAdInternal(Scanner scanner, User selectedUser) {
+        UUID owner = selectedUser.getId();
+        String ownerRegion = selectedUser.getRegion();
 
         Integer adPrice = null;
-        String[] questions = {"Titre (Obligatoire)", "Description (Obligatoire)", "Prix (Sans €) (Obligatoire)",
-                "Catégorie (Obligatoire)"};
-        String[] adInfos = new String[5];
 
-        for (int j = 0; j < questions.length; j++) {
-            if (j == 3) {
-                System.out.println("\nListe des catégories :\n" + Arrays.toString(Ad.categories));
+        String[] adInfos = new String[4];
+        String[] questions = {"Titre (Obligatoire)", "Description (Obligatoire)", "Prix (Sans €) (Obligatoire)", "Catégorie (Obligatoire)"};
+
+        for (int i = 0; i < questions.length; i++) {
+            if (i == 3) {
+                System.out.println(TerminalColor.YELLOW + "\nListe des catégories :\n" + TerminalColor.RESET + Arrays.toString(Ad.categories));
             }
 
-            System.out.print(questions[j] + " : ");
+            System.out.print(questions[i] + " : ");
             String input = scanner.nextLine();
-            adInfos[j] = input;
+            adInfos[i] = input;
         }
 
         try {
             adPrice = Integer.parseInt(adInfos[2]);
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) {
+        } // Ignored because the price validity is checked in isValidAd method
 
         String[] pictures = choosePictures(scanner);
 
-        Ad tempAd = new Ad(owner, adInfos[0], adInfos[1], pictures, adPrice, currentUser.getRegion(), adInfos[3], LocalDate.now().toString());
+        Ad tempAd = new Ad(owner, adInfos[0], adInfos[1], pictures, adPrice, ownerRegion, adInfos[3], LocalDate.now().toString());
 
         try {
             tempAd.isValidAd();
+            System.out.println(TerminalColor.GREEN + "\nAnnonce créé avec succès" + TerminalColor.RESET);
+            selectedUser.addAd(tempAd);
         } catch (InvalidAdInformations e) {
-            System.out.println(e.getMessage());
-            tempAd = null;
-        }
-
-        if (tempAd != null) {
-            System.out.println("\nAnnonce créé avec succès");
-            ads.add(tempAd);
+            System.out.println(TerminalColor.RED + e.getMessage() + TerminalColor.RESET);
         }
     }
 
-    /**
-     * Updates an existing advertisement.
-     *
-     * @param users List of users to select the owner from
-     * @param ads   List of advertisements to update
-     */
-    public static void updateAd(Scanner scanner, List<User> users, List<Ad> ads) {
+    public static void adminUpdateAd(Scanner scanner, List<User> users) {
         String prompt = "\nQuelle annonce souhaitez-vous modifier ? : ";
-        int index = listAndSelectAd(scanner, ads, prompt);
+        int[] indexes = fetchAndChooseUserAds(scanner, users, prompt);
+        int adToUpdate = indexes[0];
+        int userIndex = indexes[1];
+
+        updateAdInternal(scanner, users, users.get(userIndex), adToUpdate, true);
+    }
+
+    public static void userUpdateAd(Scanner scanner, User selectedUser) {
+        int adToUpdate = fetchAndChooseSelectedUserAds(scanner, selectedUser, "\nQuelle annonce souhaitez-vous modifier ? : ");
+        updateAdInternal(scanner, null, selectedUser, adToUpdate, false);
+    }
+
+    private static void updateAdInternal(Scanner scanner, List<User> users, User selectedUser, int adToUpdate, boolean adminMode) {
+        if (selectedUser.getAds().isEmpty()) {
+            System.out.println(TerminalColor.RED + "\nAucune annonce à modifier" + TerminalColor.RESET);
+            return;
+        }
 
         while (true) {
-            Ad originalAd = ads.get(index);
-            Ad adCopy = new Ad(originalAd);
+            Ad originalAd = selectedUser.getAds().get(adToUpdate);
+            Ad adCopy = new Ad(selectedUser.getAds().get(adToUpdate));
 
-            System.out.println("\nL'annonce sélectionnée est :\n" + originalAd);
-            printMenu();
+            System.out.println(TerminalColor.YELLOW + "\nL'annonce sélectionnée est :\n" + TerminalColor.RESET + originalAd);
+            if (adminMode) {
+                printAdminMenu();
+            } else {
+                printUserMenu();
+            }
 
             try {
                 int input = Integer.parseInt(scanner.nextLine());
-                if (input == 9) {
-                    System.out.println("\nSortie de la modification\n");
+                if (input == (adminMode ? 9 : 6)) {
+                    System.out.println(TerminalColor.YELLOW + "\nSortie de la modification" + TerminalColor.RESET);
                     return;
                 }
 
-                if (input >= 1 && input <= 8) {
-                    processInput(scanner, users, adCopy ,input);
+                if ((adminMode && input >= 1 && input <= 8) || (!adminMode && input >= 1 && input <= 5)) {
+                    processInput(scanner, users, adCopy, input, adminMode);
 
                     try {
                         adCopy.isValidAd();
-                        ads.set(index, adCopy);
-                        System.out.println("\nAnnonce modifiée avec succès\n");
+                        if (adminMode && input == 1) {
+                            boolean isModify = setNewOwner(originalAd, adCopy, users);
+                            if (!isModify) {
+                                System.out.println(TerminalColor.RED + "\nL'annonce n'a pas été modifiée, le propriétaire est le même" + TerminalColor.RESET);
+                                return;
+                            }
+                        } else {
+                            selectedUser.getAds().set(adToUpdate, adCopy);
+                        }
 
+                        System.out.println(TerminalColor.GREEN + "\nAnnonce modifiée avec succès" + TerminalColor.RESET);
                     } catch (InvalidAdInformations e) {
-                        System.out.println(e.getMessage() + "\n" + "Données invalides, aucun changement appliqué");
+                        System.out.println(TerminalColor.RED + e.getMessage() + "\n" + "Données invalides, aucun changement appliqué" + TerminalColor.RESET);
                     }
                 } else {
-                    System.out.println("Veuillez entrer un nombre entre 1 et 8");
+                    System.out.println(TerminalColor.RED + "Veuillez entrer un nombre valide" + TerminalColor.RESET);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre valide.");
+                System.out.println(TerminalColor.RED + "Veuillez entrer un nombre valide." + TerminalColor.RESET);
             }
         }
     }
 
-    /**
-     * Prints the menu for modifying an ad.
-     */
-    private static void printMenu() {
+    private static void printAdminMenu() {
         System.out.print("""
                 Quelle information souhaitez-vous modifier ?\
-                
+
                  1. Propriétaire\
-                
+
                  2. Titre\
-                
+
                  3. Description\
-                
+
                  4. Photo(s)\
-                
+
                  5. Prix\
-                
+
                  6. Région\
-                
+
                  7. Catégorie\
-                
+
                  8. Date de publication\
-                
+
                  9. Quitter
-                
+
 
                 Votre choix :\s""");
     }
 
-    /**
-     * Processes the user input for updating the ad.
-     *
-     * @param input   The user input
-     * @param adCopy  The ad to update
-     * @param users   The list of users
-     * @param scanner The scanner for user input
-     */
-    private static void processInput(Scanner scanner, List<User> users, Ad adCopy, int input) {
-        switch (input) {
-            case 1 -> adCopy.setOwner(newOwner(scanner, users));
-            case 2 -> adCopy.setTitle(getInput(scanner, "\nNouveau titre : "));
-            case 3 -> adCopy.setDescription(getInput(scanner, "\nNouvelle description : "));
-            case 4 -> adCopy.setPictures(choosePictures(scanner));
-            case 5 -> adCopy.setPrice(getValidPrice(scanner));
-            case 6 -> adCopy.setRegion(getInput(scanner, "Nouvelle région : "));
-            case 7 -> adCopy.setCategory(getInput(scanner, "\nNouvelle catégorie : "));
-            case 8 -> adCopy.setPublicationDate(getInput(scanner, "Nouvelle date de publication (yyyy-mm-dd) : "));
-        }
+    private static void printUserMenu() {
+        System.out.print("""
+                Quelle information souhaitez-vous modifier ?\
+
+                 1. Titre\
+
+                 2. Description\
+
+                 3. Photo(s)\
+
+                 4. Prix\
+
+                 5. Catégorie\
+
+                 6. Quitter
+
+
+                Votre choix :\s""");
     }
 
-    /**
-     * Gets input from the user.
-     *
-     * @param scanner The scanner for user input
-     * @param prompt  The prompt to display to the user
-     * @return The user input
-     */
+    private static void processInput(Scanner scanner, List<User> users, Ad adCopy, int input, boolean adminMode) {
+        if (adminMode) {
+            switch (input) {
+                case 1 -> adCopy.setOwner(newOwner(scanner, users));
+                case 2 -> adCopy.setTitle(getInput(scanner, "\nNouveau titre : "));
+                case 3 -> adCopy.setDescription(getInput(scanner, "\nNouvelle description : "));
+                case 4 -> adCopy.setPictures(choosePictures(scanner));
+                case 5 -> adCopy.setPrice(getValidPrice(scanner));
+                case 6 -> adCopy.setRegion(getInput(scanner, "Nouvelle région : "));
+                case 7 -> adCopy.setCategory(getInput(scanner, "\nNouvelle catégorie : "));
+                case 8 -> adCopy.setPublicationDate(getInput(scanner, "Nouvelle date de publication (yyyy-mm-dd) : "));
+            }
+        } else {
+            switch (input) {
+                case 1 -> adCopy.setTitle(getInput(scanner, "\nNouveau titre : "));
+                case 2 -> adCopy.setDescription(getInput(scanner, "\nNouvelle description : "));
+                case 3 -> adCopy.setPictures(choosePictures(scanner));
+                case 4 -> adCopy.setPrice(getValidPrice(scanner));
+                case 5 ->
+                        adCopy.setCategory(getInput(scanner, TerminalColor.YELLOW + "\nListe des catégories :\n" + TerminalColor.RESET + Arrays.toString(Ad.categories) + "\nNouvelle catégorie : "));
+            }
+        }
+
+    }
+
+    private static UUID newOwner(Scanner scanner, List<User> users) {
+        String prompt = "À quel utilisateur souhaitez-vous attribuer cette annonce ? : ";
+        return users.get(listAndSelectUser(scanner, users, prompt)).getId();
+    }
+
+    private static boolean setNewOwner(Ad originalAd, Ad adCopy, List<User> users) {
+        User previousOwner = null;
+        User newOwner = null;
+
+        for (User user : users) {
+            if (previousOwner != null && newOwner != null) {
+                break;
+            } else if (user.getId().equals(originalAd.getOwner())) {
+                previousOwner = user;
+            } else if (user.getId().equals(adCopy.getOwner())) {
+                newOwner = user;
+            }
+        }
+
+        if (previousOwner == null || newOwner == null) {
+            return false;
+        }
+
+        int maxLength = Math.max(Objects.requireNonNull(previousOwner).getAds().size(), Objects.requireNonNull(newOwner).getAds().size());
+
+        for (int i = maxLength - 1; i >= 0; i--) {
+            if (i < previousOwner.getAds().size()) {
+                if (previousOwner.getAds().get(i).getTitle().equals(originalAd.getTitle()) && previousOwner.getAds().get(i).getOwner().equals(originalAd.getOwner())) {
+                    previousOwner.getAds().remove(i);
+                }
+            }
+        }
+        newOwner.addAd(adCopy);
+
+        return true;
+    }
+
     private static String getInput(Scanner scanner, String prompt) {
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
-    /**
-     * Selects a new owner for the ad from the list of users.
-     *
-     * @param users The list of users
-     * @return The UUID of the new owner
-     */
-    private static UUID newOwner(Scanner scanner, List<User> users) {
-        String prompt = "À quel utilisateur souhaitez vous attribuer cette annonce ? : ";
-        return users.get(listAndSelectUser(scanner, users, prompt)).getId();
-    }
-
-    /**
-     * Gets a valid price input from the user.
-     *
-     * @param scanner The scanner for user input
-     * @return The valid price input
-     */
-    private static Integer getValidPrice(Scanner scanner) {
-        while (true) {
-            System.out.print("\nNouveau prix (sans €) : ");
-            try {
-                String input = scanner.nextLine();
-                if (input.isEmpty()) return null;
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre entier sans ajouter le sigle €.");
-            }
-        }
-    }
-
-    /**
-     * Chooses pictures for the ad.
-     *
-     * @param scanner The scanner for user input
-     * @return The array of picture URLs
-     */
     private static String[] choosePictures(Scanner scanner) {
         String[] pictures;
 
@@ -236,26 +288,50 @@ public class AdService {
                     }
                     break;
                 } else {
-                    System.out.println("\nVeuillez entrer un nombre compris entre 1 et 5");
+                    System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre compris entre 1 et 5" + TerminalColor.RESET);
                 }
             } catch (NumberFormatException ignored) {
-                System.out.println("\nVeuillez entrer un nombre valide");
+                System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre valide" + TerminalColor.RESET);
             }
         }
         return pictures;
     }
 
-    /**
-     * Deletes an advertisement from the list.
-     *
-     * @param ads List of advertisements to delete from
-     */
-    public static void deleteAd(Scanner scanner, List<Ad> ads) {
-        String prompt = "Quelle annonce souhaitez-vous supprimer ? : ";
-        int index = listAndSelectAd(scanner, ads, prompt);
+    private static Integer getValidPrice(Scanner scanner) {
+        while (true) {
+            System.out.print("\nNouveau prix (sans €) : ");
+            try {
+                String input = scanner.nextLine();
+                if (input.isEmpty()) return null;
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println(TerminalColor.RED + "Veuillez entrer un nombre entier sans ajouter le sigle €." + TerminalColor.RESET);
+            }
+        }
+    }
 
-        Ad adToDelete = ads.get(index);
-        System.out.println("\nL'annonce sélectionnée est :\n" + adToDelete);
+    public static void adminDeleteAd(Scanner scanner, List<User> users) {
+        String prompt = "Quelle annonce souhaitez-vous supprimer ? : ";
+        int[] indexes = fetchAndChooseUserAds(scanner, users, prompt);
+
+        int userIndex = indexes[0];
+        int adIndex = indexes[1];
+        Ad adToDelete = users.get(userIndex).getAds().get(adIndex);
+
+        deleteAdInternal(scanner, users.get(userIndex), adToDelete);
+    }
+
+    public static void userDeleteAd(Scanner scanner, User selectedUser) {
+        String prompt = "Quelle annonce souhaitez-vous supprimer ? : ";
+        int index = fetchAndChooseSelectedUserAds(scanner, selectedUser, prompt);
+
+        Ad adToDelete = selectedUser.getAds().get(index);
+
+        deleteAdInternal(scanner, selectedUser, adToDelete);
+    }
+
+    private static void deleteAdInternal(Scanner scanner, User selectedUser, Ad adToDelete) {
+        System.out.println(TerminalColor.YELLOW + "\nL'annonce sélectionnée est :\n" + TerminalColor.RESET + adToDelete);
 
         System.out.println("Voulez-vous vraiment supprimer cette annonce ?\n1. Oui\n2. Non");
         while (true) {
@@ -265,59 +341,97 @@ public class AdService {
                 int choice = Integer.parseInt(input);
                 if (choice == 1 || choice == 2) {
                     if (choice == 1) {
-                        ads.remove(index);
-                        System.out.println("\nAnnonce supprimée avec succès\n");
+                        selectedUser.getAds().remove(adToDelete);
+                        System.out.println(TerminalColor.GREEN + "\nAnnonce supprimée avec succès\n" + TerminalColor.RESET);
                     } else {
-                        System.out.println("\nSuppression annulée\n");
+                        System.out.println(TerminalColor.RED + "\nSuppression annulée\n" + TerminalColor.RESET);
                     }
                     break;
                 } else {
-                    System.out.println("Veuillez entrer 1 ou 2");
+                    System.out.println(TerminalColor.RED + "Veuillez entrer 1 ou 2" + TerminalColor.RESET);
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre entier");
+                System.out.println(TerminalColor.RED + "Veuillez entrer un nombre entier" + TerminalColor.RESET);
             }
         }
     }
 
-    /**
-     * Lists and selects an advertisement from the list.
-     *
-     * @param ads    List of advertisements to select from
-     * @param prompt The prompt to display to the user
-     * @return The index of the selected advertisement
-     */
-    private static int listAndSelectAd(Scanner scanner, List<Ad> ads, String prompt) {
+    private static int[] fetchAndChooseUserAds(Scanner scanner, List<User> users, String prompt) {
         int adIndex;
         boolean repetition = true;
+
+        Map<Integer, Integer> adToUserIndexMap = new HashMap<>();
+        Map<Integer, Integer> adToAdIndexMap = new HashMap<>();
+
+        int count = 1;
 
         while (true) {
             if (repetition) {
                 repetition = false;
-                System.out.println("\nListe des annonces :");
-                for (int i = 0; i < ads.size(); i++) {
-                    System.out.println("\n" + (i + 1) + ".");
+
+                for (int i = 0; i < users.size(); i++) {
+                    User user = users.get(i);
+                    for (int j = 0; j < user.getAds().size(); j++) {
+                        Ad ad = user.getAds().get(j);
+                        adToUserIndexMap.put(count, i); // Mapping de l'index de l'annonce à l'index de l'utilisateur
+                        adToAdIndexMap.put(count, j);   // Mapping de l'index de l'annonce à l'index de l'annonce de l'utilisateur
+                        System.out.println("\n" + TerminalColor.YELLOW + count + "." + TerminalColor.RESET);
+                        System.out.print("=========================================");
+                        System.out.println(ad.shortToString());
+                        System.out.print("=========================================\n");
+                        count++;
+                    }
+                }
+            }
+
+            System.out.print('\n' + prompt);
+            String input = scanner.nextLine();
+
+            try {
+                adIndex = Integer.parseInt(input);
+                if (adIndex >= 1 && adIndex < count) {
+                    int userAdIndex = adToAdIndexMap.get(adIndex);
+                    int userIndex = adToUserIndexMap.get(adIndex);
+                    return new int[]{userAdIndex, userIndex};
+                } else {
+                    System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre de la liste des annonces" + TerminalColor.RESET);
+                }
+            } catch (NumberFormatException ignored) {
+                System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entier" + TerminalColor.RESET);
+            }
+        }
+    }
+
+
+    private static int fetchAndChooseSelectedUserAds(Scanner scanner, User selectedUser, String prompt) {
+        boolean repetition = true;
+
+        while (true) {
+
+            if (repetition) {
+                repetition = false;
+                for (int i = 0; i < selectedUser.getAds().size(); i++) {
+                    System.out.println("\n" + TerminalColor.YELLOW + (i + 1) + "." + TerminalColor.RESET);
                     System.out.print("=========================================");
-                    System.out.println(ads.get(i).shortToString());
+                    System.out.println(selectedUser.getAds().get(i).shortToString());
                     System.out.print("=========================================\n");
                 }
             }
 
             System.out.print('\n' + prompt);
             String input = scanner.nextLine();
+
             try {
-                adIndex = Integer.parseInt(input) - 1;
-                adIndex = adIndex >= 0 && adIndex < ads.size() ? adIndex : 0;
-                if (adIndex != 0) {
-                    break;
+                int adIndex = Integer.parseInt(input);
+                if (adIndex >= 1 && adIndex <= selectedUser.getAds().size()) {
+                    return adIndex - 1;
                 } else {
-                    System.out.println("\nVeuillez entrer un nombre entier de la liste des annonces");
+                    System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre de la liste des annonces" + TerminalColor.RESET);
                 }
             } catch (NumberFormatException ignored) {
-                System.out.println("\nVeuillez entrer un nombre entier");
+                System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entier" + TerminalColor.RESET);
             }
         }
-        return adIndex;
     }
 
 }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.xplit.leboncoin.model.User;
 import com.xplit.leboncoin.util.InvalidUserInformations;
+import com.xplit.leboncoin.util.TerminalColor;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,21 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * The UsersRepository class provides methods to read users from a JSON file.
- */
 public class UsersRepository {
 
-    /**
-     * Reads users from a JSON file.
-     *
-     * @param path The path to the JSON file containing the users
-     * @return     A list of users read from the file
-     * @throws IOException if an I/O error occurs
-     */
     public static List<User> readUsersFromFile(String path) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(path);
+
         List<User> users = new ArrayList<>();
 
         try (JsonParser parser = mapper.createParser(file)) {
@@ -44,17 +36,16 @@ public class UsersRepository {
                     user = reader.readValue(parser);
                     user.isValidUser();
 
-                    // Assign a new UUID to the user
                     user.setId(UUID.randomUUID());
 
                     users.add(user);
                 } catch (InvalidUserInformations e) {
-                    System.out.println(e.getMessage() + user);
+                    System.out.println(TerminalColor.RED + e.getMessage() + user + TerminalColor.RESET);
                 } catch (JsonParseException e) {
-                    System.out.println("(User) Error of deserialization (Check json type) : " + e.getMessage());
+                    System.out.println(TerminalColor.RED + "(User) Error of deserialization (Check json type) : " + e.getMessage() + TerminalColor.RESET);
                     break;
                 } catch (Exception e) {
-                    System.out.println("(User) Error of deserialization (Check json type or syntax) : " + e.getMessage());
+                    System.out.println(TerminalColor.RED + "(User) Error of deserialization (Check json type or syntax) : " + e.getMessage() + TerminalColor.RESET);
                 }
             }
         } catch (IOException e) {

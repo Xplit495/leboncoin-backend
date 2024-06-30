@@ -4,7 +4,6 @@
     "description": "Vélo de course en excellent état, utilisé seulement quelques fois.",
     "pictures": ["image1.jpg", "image2.jpg"],
     "price": 500,
-    "region": "Île-de-France",
     "category": "Sport",
     "publicationDate": "2024-01-01"
   },
@@ -13,7 +12,6 @@
     "description": "Bel appartement lumineux de 3 pièces en plein centre de Paris.",
     "pictures": ["image3.jpg", "image4.jpg"],
     "price": 1500,
-    "region": "Île-de-France",
     "category": "Immobilier",
     "publicationDate": "2024-02-01"
   },
@@ -22,7 +20,6 @@
     "description": "Voiture d'occasion, bon état général, contrôle technique OK.",
     "pictures": ["image5.jpg", "image6.jpg"],
     "price": 3000,
-    "region": "Bretagne",
     "category": "Véhicules",
     "publicationDate": "2024-03-01"
   },
@@ -31,7 +28,6 @@
     "description": "Ordinateur portable récent, parfait pour le travail ou les études.",
     "pictures": ["image7.jpg", "image8.jpg"],
     "price": 800,
-    "region": "Auvergne-Rhône-Alpes",
     "category": "Informatique",
     "publicationDate": "2024-04-01"
   },
@@ -40,7 +36,6 @@
     "description": "Canapé d'angle confortable, idéal pour les grands salons.",
     "pictures": ["image9.jpg", "image10.jpg"],
     "price": 600,
-    "region": "Occitanie",
     "category": "Maison",
     "publicationDate": "2024-05-01"
   },
@@ -49,7 +44,6 @@
     "description": "Table de jardin en bois, parfaite pour les repas en extérieur.",
     "pictures": ["image11.jpg", "image12.jpg"],
     "price": 200,
-    "region": "Provence-Alpes-Côte d'Azur",
     "category": "Jardin",
     "publicationDate": "2024-06-01"
   },
@@ -58,7 +52,6 @@
     "description": "Réfrigérateur en bon état, grande capacité de stockage.",
     "pictures": ["image13.jpg", "image14.jpg"],
     "price": 300,
-    "region": "Grand Est",
     "category": "Electroménager",
     "publicationDate": "2024-06-12"
   },
@@ -67,7 +60,6 @@
     "description": "Télévision 4K de 55 pouces, idéale pour les films et les jeux vidéo.",
     "pictures": ["image15.jpg", "image16.jpg"],
     "price": 700,
-    "region": "Hauts-de-France",
     "category": "Multimédia",
     "publicationDate": "2023-01-02"
   },
@@ -76,7 +68,6 @@
     "description": "Lit double avec matelas, très peu utilisé.",
     "pictures": ["image17.jpg", "image18.jpg"],
     "price": 400,
-    "region": "Bourgogne-Franche-Comté",
     "category": "Maison",
     "publicationDate": "2024-03-01"
   },
@@ -85,7 +76,6 @@
     "description": "Machine à laver de marque, fonctionne parfaitement.",
     "pictures": ["image19.jpg", "image20.jpg"],
     "price": 250,
-    "region": "Centre-Val de Loire",
     "category": "Electroménager",
     "publicationDate": "2023-11-01"
   }

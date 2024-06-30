@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.xplit.leboncoin.model.Ad;
 import com.xplit.leboncoin.model.User;
 import com.xplit.leboncoin.util.InvalidAdInformations;
+import com.xplit.leboncoin.util.TerminalColor;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,20 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * The AdsRepository class provides methods to read ads from a JSON file
- * and assign them to random users.
- */
 public class AdsRepository {
 
-    /**
-     * Reads ads from a JSON file and assigns them to random users.
-     *
-     * @param path   The path to the JSON file containing the ads
-     * @param users  The list of users to randomly assign as owners of the ads
-     * @return       A list of ads read from the file
-     * @throws IOException if an I/O error occurs
-     */
     public static List<Ad> readAdsFromFile(String path, List<User> users) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(path);
@@ -44,22 +33,25 @@ public class AdsRepository {
             while (parser.nextToken() != JsonToken.END_ARRAY) {
                 Ad ad = null;
                 try {
-                    ad = reader.readValue(parser);
-                    ad.isValidAd();
-
-                    // Assign a random user as the owner of the ad
                     Random random = new Random();
                     int randomUser = random.nextInt(users.size());
+
+                    ad = reader.readValue(parser);
+
+                    ad.setRegion(users.get(randomUser).getRegion());
+
+                    ad.isValidAd();
+
                     ad.setOwner(users.get(randomUser).getId());
 
                     ads.add(ad);
                 } catch (InvalidAdInformations e) {
-                    System.out.println(e.getMessage() + ad);
+                    System.out.println(TerminalColor.RED + e.getMessage() + ad + TerminalColor.RESET);
                 } catch (JsonParseException e) {
-                    System.out.println("(Ad) Error of deserialization (Check json type) : " + e.getMessage());
+                    System.out.println(TerminalColor.RED + "(Ad) Error of deserialization (Check json type) : " + e.getMessage() + TerminalColor.RESET);
                     break;
                 } catch (Exception e) {
-                    System.out.println("(Ad) Error of deserialization (Check json type) : " + e.getMessage());
+                    System.out.println(TerminalColor.RED + "(Ad) Error of deserialization (Check json type) : " + e.getMessage() + TerminalColor.RESET);
                 }
             }
         } catch (IOException e) {

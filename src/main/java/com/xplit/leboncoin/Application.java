@@ -4,7 +4,9 @@ import com.xplit.leboncoin.authorization.AdminMode;
 import com.xplit.leboncoin.authorization.UserMode;
 import com.xplit.leboncoin.model.Ad;
 import com.xplit.leboncoin.model.User;
+import com.xplit.leboncoin.service.UserService;
 import com.xplit.leboncoin.util.DataInitializer;
+import com.xplit.leboncoin.util.TerminalColor;
 
 import java.util.List;
 import java.util.Scanner;
@@ -24,48 +26,44 @@ public class Application {
      */
     public static void main(String[] args) {
         try {
-            // Initialize users and ads from JSON files
             List<User> users = DataInitializer.initializeUsers("src/main/resources/users.json");
             List<Ad> ads = DataInitializer.initializeAds("src/main/resources/ads.json", users);
+            UserService.assignAdsToUser(users, ads);
 
             Scanner scanner = new Scanner(System.in);
 
             while (true) {
                 int input;
                 System.out.print("""
-                        
-                        1. Mode administrateur\
-                        
-                        2. Mode utilisateur\
-                        
-                        3. Quitter\
-                        
 
-                        Votre choix : \s""");
+                        1. Mode administrateur\
+
+                        2. Mode utilisateur\
+
+                        3. Quitter\
+
+
+                        Votre choix :\s""");
 
                 try {
-                    // Read user input
                     input = Integer.parseInt(scanner.nextLine());
-                        // Handle user input and perform corresponding operations
-                        if (input == 1) {
-                            AdminMode adminMode = new AdminMode();
-                            adminMode.runAdmin(scanner, users, ads);
-                        } else if (input == 2) {
-                            UserMode userMode = new UserMode();
-                            userMode.runUser(scanner, users, ads);
-                        } else if (input == 3){
-                            System.out.println("\nAu revoir !");
-                            scanner.close();
-                            return;
-                        } else {
-                            System.out.println("\nVeuillez entrer un nombre entre 1 et 3");
-                        }
+                    if (input == 1) {
+                        AdminMode.runAdmin(scanner, users, ads);
+                    } else if (input == 2) {
+                        UserMode.runUser(scanner, users, ads);
+                    } else if (input == 3) {
+                        System.out.println(TerminalColor.YELLOW + "\nAu revoir !" + TerminalColor.RESET);
+                        scanner.close();
+                        return;
+                    } else {
+                        System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entre 1 et 3" + TerminalColor.RESET);
+                    }
                 } catch (NumberFormatException ignored) {
-                    System.out.println("\nVeuillez entrer un nombre");
+                    System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre" + TerminalColor.RESET);
                 }
             }
         } catch (Exception e) {
-            System.out.println("Application.java unknown error " + e.getMessage());
+            System.out.println(TerminalColor.RED + "Application.java unknown error " + e.getMessage() + TerminalColor.RESET);
         }
     }
 

@@ -8,10 +8,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Arrays;
 import java.util.UUID;
 
-/**
- * The Ad class represents an advertisement with various properties
- * such as owner, title, description, pictures, price, region, category, and publication date.
- */
 public class Ad {
     // Properties
     private UUID owner;
@@ -22,10 +18,6 @@ public class Ad {
     private String region;
     private String category;
     private String publicationDate;
-
-    /**
-     * Predefined categories for advertisements.
-     */
     public static final String[] categories = {
             "Véhicules",
             "Immobilier",
@@ -41,26 +33,10 @@ public class Ad {
             "Electroménager",
     };
 
-    /**
-     * Default constructor for Ad.
-     * Used by Jackson for JSON serialization/deserialization.
-     */
     public Ad() {
         // Default constructor needed by Jackson
     }
 
-    /**
-     * Parameterized constructor for creating an Ad instance.
-     *
-     * @param owner            UUID of the owner
-     * @param title            Title of the ad
-     * @param description      Description of the ad
-     * @param pictures         Array of picture URLs
-     * @param price            Price of the item
-     * @param region           Region where the item is located
-     * @param category         Category of the ad
-     * @param publicationDate  Publication date of the ad
-     */
     public Ad(UUID owner, String title, String description, String[] pictures, Integer price,
               String region, String category, String publicationDate) {
         this.owner = owner;
@@ -73,11 +49,6 @@ public class Ad {
         this.publicationDate = publicationDate;
     }
 
-    /**
-     * Copy constructor for creating an Ad instance from an existing Ad.
-     *
-     * @param adToCopy Ad instance to copy
-     */
     public Ad(Ad adToCopy) {
         this.owner = adToCopy.getOwner();
         this.title = adToCopy.getTitle();
@@ -155,14 +126,8 @@ public class Ad {
         this.publicationDate = publicationDate;
     }
 
-    /**
-     * Returns a string representation of the Ad instance.
-     *
-     * @return String representation of the Ad
-     */
     public String toString() {
-        return "\nAnnonce\n{" +
-                "\nPropriétaire: " + this.owner +
+        return "Propriétaire: " + this.owner +
                 "\nTitre: " + this.title +
                 "\nDescription: " + this.description +
                 "\nPhotos: " + Arrays.toString(this.pictures) +
@@ -170,14 +135,9 @@ public class Ad {
                 "\nRégion: " + this.region +
                 "\nCatégorie: " + this.category +
                 "\nDate de publication: " + this.publicationDate +
-                "\n}\n";
+                "\n";
     }
 
-    /**
-     * Returns a short string representation of the Ad instance.
-     *
-     * @return Short string representation of the Ad
-     */
     public String shortToString() {
         return "\nPropriétaire: " + this.owner +
                 "\nTitre: " + this.title +
@@ -189,11 +149,6 @@ public class Ad {
 
     // Validation methods
 
-    /**
-     * Validates the Ad instance.
-     *
-     * @throws InvalidAdInformations if any ad information is invalid
-     */
     public void isValidAd() throws InvalidAdInformations {
         isValidTitle();
         isValidDescription();

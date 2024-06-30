@@ -1,15 +1,13 @@
 package com.xplit.leboncoin.model;
 
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
 import com.xplit.leboncoin.util.InvalidUserInformations;
 
-/**
- * The User class represents a user with various properties
- * such as id, first name, last name, username, mail, phone, age, and region.
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class User {
+
     // Properties
     private UUID id;
     private String firstName;
@@ -19,28 +17,14 @@ public class User {
     private String phone;
     private Integer age;
     private String region;
+    private List<Ad> ads = new ArrayList<>();
 
-    /**
-     * Default constructor for User.
-     * Used by Jackson for JSON serialization/deserialization.
-     */
     public User() {
         // Default constructor needed by Jackson
     }
 
-    /**
-     * Parameterized constructor for creating a User instance.
-     *
-     * @param firstName First name of the user
-     * @param lastName  Last name of the user
-     * @param username  Username of the user
-     * @param mail      Email of the user
-     * @param phone     Phone number of the user
-     * @param age       Age of the user
-     * @param region    Region of the user
-     */
     public User(String firstName, String lastName, String username, String mail,
-                String phone, Integer age, String region) {
+                String phone, Integer age, String region, List<Ad> ads) {
         this.id = UUID.randomUUID();
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,13 +33,9 @@ public class User {
         this.phone = phone;
         this.age = age;
         this.region = region;
+        this.ads = ads;
     }
 
-    /**
-     * Copy constructor for creating a User instance from an existing User.
-     *
-     * @param userToCopy User instance to copy
-     */
     public User(User userToCopy) {
         this.id = userToCopy.getId();
         this.firstName = userToCopy.getFirstName();
@@ -65,18 +45,16 @@ public class User {
         this.phone = userToCopy.getPhone();
         this.age = userToCopy.getAge();
         this.region = userToCopy.getRegion();
+        this.ads = userToCopy.getAds();
     }
 
     // Getters and Setters
-
     public UUID getId() {
         return id;
     }
 
     public void setId(UUID id) {
-        if (id != null) {
-            this.id = id;
-        }
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -135,29 +113,50 @@ public class User {
         this.region = region;
     }
 
-    /**
-     * Returns a string representation of the User instance.
-     *
-     * @return String representation of the User
-     */
+    public List<Ad> getAds() {
+        return ads;
+    }
+
+    //Methods
+
+    public void addAd(Ad ad) {
+        this.ads.add(ad);
+    }
+
+    public void copyFrom(User userToCopy) {
+        this.firstName = userToCopy.getFirstName();
+        this.lastName = userToCopy.getLastName();
+        this.username = userToCopy.getUsername();
+        this.mail = userToCopy.getMail();
+        this.phone = userToCopy.getPhone();
+        this.age = userToCopy.getAge();
+        this.region = userToCopy.getRegion();
+        this.ads = userToCopy.getAds();
+    }
+
     public String toString() {
-        return "\nUtilisateur\n{" +
-                "\nID: " + this.id +
+        StringBuilder adsString = new StringBuilder();
+
+        if (!this.ads.isEmpty()) {
+            int adsSize = this.ads.size();
+            for (int i = 0; i < adsSize; i++) {
+                adsString.append("\n\n").append("Annonce N°(").append(i + 1).append("): ").append(ads.get(i).shortToString());
+            }
+        } else {
+            adsString.append("null");
+        }
+
+        return "ID: " + this.id +
                 "\nPrénom: " + this.firstName +
                 "\nNom: " + this.lastName +
                 "\nPseudo: " + this.username +
                 "\nMail: " + this.mail +
                 "\nTéléphone: " + this.phone +
                 "\nÂge: " + this.age +
-                "\nRégion: " + this.region
-                + "\n}\n";
+                "\nRégion: " + this.region +
+                "\nNombre d'annonces : " + this.ads.size() + " ↓ :" + adsString;
     }
 
-    /**
-     * Returns a short string representation of the User instance.
-     *
-     * @return Short string representation of the User
-     */
     public String shortToString() {
         return "\nID: " + this.id +
                 "\nPrénom: " + this.firstName +
@@ -166,49 +165,8 @@ public class User {
                 "\nMail: " + this.mail;
     }
 
-    /**
-     * Generates a new UUID for the user and updates the owner ID in associated ads.
-     *
-     * @param scanner Scanner object for user input
-     * @param ads     List of ads to update
-     */
-    public void newId(Scanner scanner, List<Ad> ads) {
-        System.out.println("\nPour des raisons de sécurité, l'ID ne peut pas être modifié.\nVoulez-vous en générer un nouveau à la place ?\n1. Oui\n2. Non");
-        while (true) {
-            System.out.print("Votre choix : ");
-            String input = scanner.nextLine();
-            try {
-                int choice = Integer.parseInt(input);
-                if (choice == 1 || choice == 2) {
-                    if (choice == 1) {
-                        UUID newId = UUID.randomUUID();
-                        UUID idToSearch = this.getId();
-
-                        this.setId(newId);
-
-                        for (Ad ad : ads) {
-                            if (ad.getOwner().equals(idToSearch)) {
-                                ad.setOwner(newId);
-                            }
-                        }
-                    }
-                    break;
-                } else {
-                    System.out.println("Veuillez entrer 1 ou 2");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un nombre entier");
-            }
-        }
-    }
-
     // Validation methods
 
-    /**
-     * Validates the User instance.
-     *
-     * @throws InvalidUserInformations if any user information is invalid
-     */
     public void isValidUser() throws InvalidUserInformations {
         isValidFirstName();
         isValidLastName();
