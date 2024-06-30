@@ -33,7 +33,7 @@ public class InternalUser {
         try {
             tempUser.isValidUser();
         } catch (InvalidUserInformations e) {
-            System.out.println(TerminalColor.RED + e.getMessage() + TerminalColor.RESET);
+            System.out.print(TerminalColor.RED + e.getMessage() + TerminalColor.RESET);
             tempUser = null;
         }
 
@@ -45,7 +45,7 @@ public class InternalUser {
 
     public static void updateProfileInternal(Scanner scanner, List<User> users, User selectedUser, User userCopy, Integer index, boolean isAdmin) {
         while (true) {
-            System.out.println(TerminalColor.YELLOW + "\nL'utilisateur est :\n" + TerminalColor.RESET + selectedUser);
+            System.out.println(TerminalColor.YELLOW + "\nL'utilisateur est :\n" + TerminalColor.RESET + userCopy);
             if (isAdmin) {
                 UtilUser.printAdminMenu();
             } else {

@@ -13,6 +13,11 @@ import java.util.Scanner;
 
 public class AdminMode {
     public static void runAdmin(Scanner scanner, List<User> users) {
+        if (users.isEmpty()) {
+            System.out.println("Aucun utilisateur n'a été trouvé");
+            return;
+        }
+
         while (true) {
             int input;
             System.out.print("""

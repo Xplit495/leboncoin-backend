@@ -24,25 +24,7 @@ public class UtilAd {
         }
     }
 
-    public static void showSelectedUserAds(User selectedUser) {
-        for (int i = 0; i < 40; i++) {
-            System.out.println('\n');
-        }
-
-        System.out.println(TerminalColor.YELLOW + "\nListe de vos annonces :" + TerminalColor.RESET);
-        if (selectedUser.getAds().isEmpty()) {
-            System.out.println(TerminalColor.RED + "\nAucune" + TerminalColor.RESET);
-        } else {
-            for (Ad ad : selectedUser.getAds()) {
-                System.out.println("\n====================================================================================");
-                System.out.print(ad);
-                System.out.print("====================================================================================\n\n");
-            }
-        }
-    }
-
     public static int[] fetchAndChooseUserAds(Scanner scanner, List<User> users, String prompt) {
-        int adIndex;
         boolean repetition = true;
 
         Map<Integer, Integer> adToUserIndexMap = new HashMap<>();
@@ -74,7 +56,7 @@ public class UtilAd {
             String input = scanner.nextLine();
 
             try {
-                adIndex = Integer.parseInt(input);
+                int adIndex = Integer.parseInt(input);
                 if (adIndex >= 1 && adIndex < count) {
                     int userAdIndex = adToAdIndexMap.get(adIndex);
                     int userIndex = adToUserIndexMap.get(adIndex);
@@ -173,9 +155,9 @@ public class UtilAd {
                 case 3 -> adCopy.setDescription(getInput(scanner, "\nNouvelle description : "));
                 case 4 -> adCopy.setPictures(choosePictures(scanner));
                 case 5 -> adCopy.setPrice(getValidPrice(scanner));
-                case 6 -> adCopy.setRegion(getInput(scanner, "Nouvelle région : "));
+                case 6 -> adCopy.setRegion(getInput(scanner, "\nNouvelle région : "));
                 case 7 -> adCopy.setCategory(getInput(scanner, "\nNouvelle catégorie : "));
-                case 8 -> adCopy.setPublicationDate(getInput(scanner, "Nouvelle date de publication (yyyy-mm-dd) : "));
+                case 8 -> adCopy.setPublicationDate(getInput(scanner, "\nNouvelle date de publication (yyyy-mm-dd) : "));
             }
         } else {
             switch (input) {
@@ -233,7 +215,7 @@ public class UtilAd {
                 if (input.isEmpty()) return null;
                 return Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println(TerminalColor.RED + "Veuillez entrer un nombre entier sans ajouter le sigle €." + TerminalColor.RESET);
+                System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entier sans ajouter le sigle €." + TerminalColor.RESET);
             }
         }
     }
@@ -256,15 +238,11 @@ public class UtilAd {
             return false;
         }
 
-        int maxLength = Math.max(Objects.requireNonNull(previousOwner).getAds().size(), Objects.requireNonNull(newOwner).getAds().size());
+        previousOwner.getAds().removeIf(ad ->
+                ad.getTitle().equals(originalAd.getTitle()) &&
+                        ad.getOwner().equals(originalAd.getOwner())
+        );
 
-        for (int i = maxLength - 1; i >= 0; i--) {
-            if (i < previousOwner.getAds().size()) {
-                if (previousOwner.getAds().get(i).getTitle().equals(originalAd.getTitle()) && previousOwner.getAds().get(i).getOwner().equals(originalAd.getOwner())) {
-                    previousOwner.getAds().remove(i);
-                }
-            }
-        }
         newOwner.addAd(adCopy);
 
         return true;

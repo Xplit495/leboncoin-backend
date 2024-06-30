@@ -10,6 +10,11 @@ import java.util.Scanner;
 public class AdminUserService {
 
     public static void adminUpdateProfile(Scanner scanner, List<User> users) {
+        if (users.isEmpty()) {
+            System.out.println("Aucun utilisateur n'a été trouvé");
+            return;
+        }
+
         String prompt = "Quel utilisateur souhaitez-vous modifier ? : ";
         int index = UtilUser.fetchAndChooseUser(scanner, users, prompt);
         User selectedUser = users.get(index);
@@ -19,6 +24,11 @@ public class AdminUserService {
     }
 
     public static void adminDeleteAccount(Scanner scanner, List<User> users) {
+        if (users.isEmpty()) {
+            System.out.println("Aucun utilisateur n'a été trouvé");
+            return;
+        }
+
         String prompt = "Quel utilisateur souhaitez-vous supprimer ? : ";
         int index = UtilUser.fetchAndChooseUser(scanner, users, prompt);
 

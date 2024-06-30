@@ -1,6 +1,7 @@
 package com.xplit.leboncoin.model;
 
 import com.xplit.leboncoin.util.InvalidUserInformations;
+import com.xplit.leboncoin.util.TerminalColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -122,6 +123,23 @@ public class User {
         this.ads.add(ad);
     }
 
+    public void showSelectedUserAds() {
+        for (int i = 0; i < 40; i++) {
+            System.out.println('\n');
+        }
+
+        System.out.println(TerminalColor.YELLOW + "\nListe de vos annonces :" + TerminalColor.RESET);
+        if (this.getAds().isEmpty()) {
+            System.out.println(TerminalColor.RED + "\nAucune" + TerminalColor.RESET);
+        } else {
+            for (Ad ad : this.getAds()) {
+                System.out.println("\n====================================================================================");
+                System.out.print(ad);
+                System.out.print("====================================================================================\n\n");
+            }
+        }
+    }
+
     public void copyFrom(User userToCopy) {
         this.firstName = userToCopy.getFirstName();
         this.lastName = userToCopy.getLastName();
@@ -178,49 +196,49 @@ public class User {
     private void isValidFirstName() {
         String userFirstName = this.getFirstName();
         if (userFirstName == null || userFirstName.isEmpty() || !checkType(userFirstName)) {
-            throw new InvalidUserInformations("first name");
+            throw new InvalidUserInformations("Prénom");
         }
     }
 
     private void isValidLastName() {
         String lastName = this.getLastName();
         if (lastName != null && !lastName.isEmpty() && !checkType(lastName)) {
-            throw new InvalidUserInformations("last name");
+            throw new InvalidUserInformations("Nom");
         }
     }
 
     private void isValidUsername() {
         String username = this.getUsername();
         if (username == null || username.isEmpty() || !checkType(username)) {
-            throw new InvalidUserInformations("username");
+            throw new InvalidUserInformations("Pseudo");
         }
     }
 
     private void isValidMail() {
         String userMail = this.getMail();
         if (userMail == null || userMail.isEmpty() || !checkType(userMail) || !userMail.contains("@") || (!userMail.contains(".com") && !userMail.contains(".fr"))) {
-            throw new InvalidUserInformations("mail");
+            throw new InvalidUserInformations("Mail");
         }
     }
 
     private void isValidPhone() {
         String userPhone = this.getPhone();
         if (userPhone != null && !userPhone.isEmpty() && (checkType(userPhone) || userPhone.length() != 10 || !userPhone.startsWith("0"))) {
-            throw new InvalidUserInformations("phone");
+            throw new InvalidUserInformations("Téléphone");
         }
     }
 
     private void isValidAge() {
         Integer userAge = this.getAge();
         if (userAge != null && (checkType(String.valueOf(userAge)) || userAge < 17 || userAge > 100)) {
-            throw new InvalidUserInformations("age");
+            throw new InvalidUserInformations("Age");
         }
     }
 
     private void isValidRegion() {
         String userRegion = this.getRegion();
         if (userRegion == null || userRegion.isEmpty() || !checkType(userRegion)) {
-            throw new InvalidUserInformations("region");
+            throw new InvalidUserInformations("Région");
         }
     }
 

@@ -130,7 +130,7 @@ public class Ad {
                 "\nTitre: " + this.title +
                 "\nDescription: " + this.description +
                 "\nPhotos: " + Arrays.toString(this.pictures) +
-                "\nPrix: " + this.price +
+                "\nPrix: " + this.price + '€' +
                 "\nRégion: " + this.region +
                 "\nCatégorie: " + this.category +
                 "\nDate de publication: " + this.publicationDate +
@@ -141,7 +141,7 @@ public class Ad {
         return "\nPropriétaire: " + this.owner +
                 "\nTitre: " + this.title +
                 "\nDescription: " + this.description +
-                "\nPrix : " + this.price +
+                "\nPrix : " + this.price + '€' +
                 "\nCatégorie: " + this.category +
                 "\nDate de publication: " + this.publicationDate;
     }
@@ -160,25 +160,25 @@ public class Ad {
     private void isValidTitle() {
         String adTitle = this.getTitle();
         if (adTitle == null || adTitle.isEmpty() || !checkType(adTitle)) {
-            throw new InvalidAdInformations("title");
+            throw new InvalidAdInformations("Titre");
         }
     }
 
     private void isValidDescription() {
         String adDescription = this.getDescription();
         if (adDescription == null || adDescription.isEmpty() || !checkType(adDescription)) {
-            throw new InvalidAdInformations("description");
+            throw new InvalidAdInformations("Description");
         }
     }
 
     private void isValidPictures() {
         String[] adPictures = this.getPictures();
         if (adPictures == null || adPictures.length == 0) {
-            throw new InvalidAdInformations("pictures");
+            throw new InvalidAdInformations("Photos");
         } else {
             for (String adPicture : adPictures) {
                 if (!adPicture.startsWith("image") || !checkType(adPicture)) {
-                    throw new InvalidAdInformations("pictures");
+                    throw new InvalidAdInformations("Photos");
                 }
             }
         }
@@ -187,21 +187,21 @@ public class Ad {
     private void isValidPrice() {
         Integer adPrice = this.getPrice();
         if (adPrice == null || checkType(String.valueOf(adPrice)) || adPrice < 0 || adPrice >= 10000) {
-            throw new InvalidAdInformations("price");
+            throw new InvalidAdInformations("Prix");
         }
     }
 
     private void isValidRegion() {
         String adRegion = this.getRegion();
         if (adRegion == null || adRegion.isEmpty() || !checkType(adRegion)) {
-            throw new InvalidAdInformations("region");
+            throw new InvalidAdInformations("Région");
         }
     }
 
     private void isValidCategory() {
         String adCategory = this.getCategory();
         if (adCategory == null || adCategory.isEmpty() || !checkType(adCategory)) {
-            throw new InvalidAdInformations("category");
+            throw new InvalidAdInformations("Catégorie");
         } else {
             int categoriesLength = categories.length;
             adCategory = adCategory.toLowerCase();
@@ -210,7 +210,7 @@ public class Ad {
                     this.setCategory(adCategory.substring(0, 1).toUpperCase() + adCategory.substring(1));
                     return;
                 } else if (i == categoriesLength - 1) {
-                    throw new InvalidAdInformations("category");
+                    throw new InvalidAdInformations("Catégorie");
                 }
             }
         }
@@ -219,7 +219,7 @@ public class Ad {
     private void isValidPublicationDate() {
         String adPublicationDate = this.getPublicationDate();
         if (adPublicationDate == null || adPublicationDate.length() != 10) {
-            throw new InvalidAdInformations("publication date");
+            throw new InvalidAdInformations("Date de publication");
         } else {
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -228,10 +228,10 @@ public class Ad {
                 LocalDate today = LocalDate.now();
 
                 if (publicationDate.getYear() < 2023 || publicationDate.isAfter(today)) {
-                    throw new InvalidAdInformations("publication date");
+                    throw new InvalidAdInformations("Date de publication");
                 }
             } catch (DateTimeParseException e) {
-                throw new InvalidAdInformations("publication date");
+                throw new InvalidAdInformations("Date de publication");
             }
         }
     }

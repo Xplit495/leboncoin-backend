@@ -12,6 +12,11 @@ import java.util.Scanner;
 
 public class UserMode {
     public static void runUser(Scanner scanner, List<User> users) {
+        if (users.isEmpty()) {
+            System.out.println("Aucun utilisateur n'a été trouvé");
+            return;
+        }
+
         String prompt = "Avec quel utilisateur souhaitez-vous vous connecter : ";
         int index = UtilUser.fetchAndChooseUser(scanner, users, prompt);
 
@@ -46,7 +51,7 @@ public class UserMode {
                 if (input >= 1 && input <= 8) {
                     switch (input) {
                         case 1 -> UtilAd.showAds(users);
-                        case 2 -> UtilAd.showSelectedUserAds(selectedUser);
+                        case 2 -> selectedUser.showSelectedUserAds();
                         case 3 -> UserAdService.userCreateAd(scanner, selectedUser);
                         case 4 -> UserAdService.userUpdateAd(scanner, selectedUser);
                         case 5 -> UserAdService.userDeleteAd(scanner, selectedUser);
@@ -62,7 +67,7 @@ public class UserMode {
                         }
                     }
                 } else {
-                    System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entre 1 et 7" + TerminalColor.RESET);
+                    System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entre 1 et 8" + TerminalColor.RESET);
                 }
             } catch (NumberFormatException e) {
                 System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre valide" + TerminalColor.RESET);

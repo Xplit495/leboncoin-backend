@@ -46,7 +46,7 @@ public class InternalAd {
             System.out.println(TerminalColor.GREEN + "\nAnnonce créé avec succès" + TerminalColor.RESET);
             selectedUser.addAd(tempAd);
         } catch (InvalidAdInformations e) {
-            System.out.println(TerminalColor.RED + e.getMessage() + TerminalColor.RESET);
+            System.out.print(TerminalColor.RED + e.getMessage() + TerminalColor.RESET);
         }
     }
 
@@ -90,14 +90,16 @@ public class InternalAd {
                         }
 
                         System.out.println(TerminalColor.GREEN + "\nAnnonce modifiée avec succès" + TerminalColor.RESET);
+                        return;
+                        
                     } catch (InvalidAdInformations e) {
-                        System.out.println(TerminalColor.RED + e.getMessage() + "\n" + "Données invalides, aucun changement appliqué" + TerminalColor.RESET);
+                        System.out.println(TerminalColor.RED + e.getMessage() + "\nDonnées invalides, aucun changement appliqué" + TerminalColor.RESET);
                     }
                 } else {
-                    System.out.println(TerminalColor.RED + "Veuillez entrer un nombre valide" + TerminalColor.RESET);
+                    System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre valide" + TerminalColor.RESET);
                 }
             } catch (NumberFormatException e) {
-                System.out.println(TerminalColor.RED + "Veuillez entrer un nombre valide." + TerminalColor.RESET);
+                System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre valide." + TerminalColor.RESET);
             }
         }
     }

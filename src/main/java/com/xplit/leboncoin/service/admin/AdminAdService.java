@@ -12,6 +12,11 @@ import java.util.Scanner;
 public class AdminAdService {
 
     public static void adminCreateAd(Scanner scanner, List<User> users) {
+        if (users.isEmpty()) {
+            System.out.println("Aucun utilisateur n'a été trouvé");
+            return;
+        }
+
         String prompt = "À quel utilisateur souhaitez vous attribuer cette annonce ? : ";
         int index = UtilUser.fetchAndChooseUser(scanner, users, prompt);
         User selectedUser = users.get(index);
@@ -20,7 +25,12 @@ public class AdminAdService {
     }
 
     public static void adminUpdateAd(Scanner scanner, List<User> users) {
-        String prompt = "\nQuelle annonce souhaitez-vous modifier ? : ";
+        if (users.isEmpty()) {
+            System.out.println("Aucun utilisateur n'a été trouvé");
+            return;
+        }
+
+        String prompt = "Quelle annonce souhaitez-vous modifier ? : ";
         int[] indexes = UtilAd.fetchAndChooseUserAds(scanner, users, prompt);
         int adToUpdate = indexes[0];
         int userIndex = indexes[1];
@@ -29,11 +39,16 @@ public class AdminAdService {
     }
 
     public static void adminDeleteAd(Scanner scanner, List<User> users) {
+        if (users.isEmpty()) {
+            System.out.println("Aucun utilisateur n'a été trouvé");
+            return;
+        }
+
         String prompt = "Quelle annonce souhaitez-vous supprimer ? : ";
         int[] indexes = UtilAd.fetchAndChooseUserAds(scanner, users, prompt);
 
-        int userIndex = indexes[0];
-        int adIndex = indexes[1];
+        int adIndex = indexes[0];
+        int userIndex = indexes[1];
         Ad adToDelete = users.get(userIndex).getAds().get(adIndex);
 
         InternalAd.deleteAdInternal(scanner, users.get(userIndex), adToDelete);
