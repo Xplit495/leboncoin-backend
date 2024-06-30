@@ -61,7 +61,6 @@ public class Ad {
     }
 
     // Getters and Setters
-
     public UUID getOwner() {
         return owner;
     }
@@ -148,7 +147,6 @@ public class Ad {
     }
 
     // Validation methods
-
     public void isValidAd() throws InvalidAdInformations {
         isValidTitle();
         isValidDescription();

@@ -1,6 +1,5 @@
 package com.xplit.leboncoin.authorization;
 
-import com.xplit.leboncoin.model.Ad;
 import com.xplit.leboncoin.model.User;
 import com.xplit.leboncoin.service.AdService;
 import com.xplit.leboncoin.service.UserService;
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class UserMode {
-    public static void runUser(Scanner scanner, List<User> users, List<Ad> ads) {
+    public static void runUser(Scanner scanner, List<User> users) {
         String prompt = "Avec quel utilisateur souhaitez-vous vous connecter : ";
         int index = UserService.listAndSelectUser(scanner, users, prompt);
 
@@ -49,9 +48,9 @@ public class UserMode {
                         case 3 -> AdService.userCreateAd(scanner, selectedUser);
                         case 4 -> AdService.userUpdateAd(scanner, selectedUser);
                         case 5 -> AdService.userDeleteAd(scanner, selectedUser);
-                        case 6 -> UserService.updateUser(scanner, selectedUser);
+                        case 6 -> UserService.userUpdateProfile(scanner, selectedUser);
                         case 7 -> {
-                            UserService.deleteUser(scanner, users, ads, selectedUser);
+                            UserService.userDeleteAccount(scanner, users, index);
                             System.out.println(TerminalColor.YELLOW + "\nDéconnexion..." + TerminalColor.RESET);
                             return;
                         }

@@ -48,9 +48,9 @@ public class Application {
                 try {
                     input = Integer.parseInt(scanner.nextLine());
                     if (input == 1) {
-                        AdminMode.runAdmin(scanner, users, ads);
+                        AdminMode.runAdmin(scanner, users);
                     } else if (input == 2) {
-                        UserMode.runUser(scanner, users, ads);
+                        UserMode.runUser(scanner, users);
                     } else if (input == 3) {
                         System.out.println(TerminalColor.YELLOW + "\nAu revoir !" + TerminalColor.RESET);
                         scanner.close();

@@ -332,8 +332,8 @@ public class AdService {
 
     private static void deleteAdInternal(Scanner scanner, User selectedUser, Ad adToDelete) {
         System.out.println(TerminalColor.YELLOW + "\nL'annonce sélectionnée est :\n" + TerminalColor.RESET + adToDelete);
-
         System.out.println("Voulez-vous vraiment supprimer cette annonce ?\n1. Oui\n2. Non");
+
         while (true) {
             System.out.print("Votre choix : ");
             String input = scanner.nextLine();
@@ -342,7 +342,7 @@ public class AdService {
                 if (choice == 1 || choice == 2) {
                     if (choice == 1) {
                         selectedUser.getAds().remove(adToDelete);
-                        System.out.println(TerminalColor.GREEN + "\nAnnonce supprimée avec succès\n" + TerminalColor.RESET);
+                        System.out.println(TerminalColor.GREEN + "\nAnnonce supprimée avec succès" + TerminalColor.RESET);
                     } else {
                         System.out.println(TerminalColor.RED + "\nSuppression annulée\n" + TerminalColor.RESET);
                     }
@@ -369,12 +369,13 @@ public class AdService {
             if (repetition) {
                 repetition = false;
 
+                System.out.println(TerminalColor.YELLOW + "\nListe des annonces :" + TerminalColor.RESET);
                 for (int i = 0; i < users.size(); i++) {
                     User user = users.get(i);
                     for (int j = 0; j < user.getAds().size(); j++) {
                         Ad ad = user.getAds().get(j);
-                        adToUserIndexMap.put(count, i); // Mapping de l'index de l'annonce à l'index de l'utilisateur
-                        adToAdIndexMap.put(count, j);   // Mapping de l'index de l'annonce à l'index de l'annonce de l'utilisateur
+                        adToUserIndexMap.put(count, i); // Mapping user index to user ad index
+                        adToAdIndexMap.put(count, j);   // Mapping user ad index to user index
                         System.out.println("\n" + TerminalColor.YELLOW + count + "." + TerminalColor.RESET);
                         System.out.print("=========================================");
                         System.out.println(ad.shortToString());
@@ -407,9 +408,9 @@ public class AdService {
         boolean repetition = true;
 
         while (true) {
-
             if (repetition) {
                 repetition = false;
+                System.out.println(TerminalColor.YELLOW + "\nListe des annonces :" + TerminalColor.RESET);
                 for (int i = 0; i < selectedUser.getAds().size(); i++) {
                     System.out.println("\n" + TerminalColor.YELLOW + (i + 1) + "." + TerminalColor.RESET);
                     System.out.print("=========================================");

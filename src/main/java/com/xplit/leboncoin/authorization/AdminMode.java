@@ -1,6 +1,5 @@
 package com.xplit.leboncoin.authorization;
 
-import com.xplit.leboncoin.model.Ad;
 import com.xplit.leboncoin.model.User;
 import com.xplit.leboncoin.service.AdService;
 import com.xplit.leboncoin.service.UserService;
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminMode {
-    public static void runAdmin(Scanner scanner, List<User> users, List<Ad> ads) {
+    public static void runAdmin(Scanner scanner, List<User> users) {
         while (true) {
             int input;
             System.out.print("""
@@ -23,11 +22,11 @@ public class AdminMode {
 
                     4. Créer une annonce\
 
-                    5. Modifier un utilisateur\
+                    5. Modifier un profil\
 
                     6. Modifier une annonce\
 
-                    7. Supprimer un utilisateur\
+                    7. Supprimer un compte\
 
                     8. Supprimer une annonce\
 
@@ -44,9 +43,9 @@ public class AdminMode {
                         case 2 -> AdService.showAds(users);
                         case 3 -> UserService.createUser(scanner, users);
                         case 4 -> AdService.adminCreateAd(scanner, users);
-                        case 5 -> UserService.updateUser(scanner, users, ads);
+                        case 5 -> UserService.adminUpdateProfile(scanner, users);
                         case 6 -> AdService.adminUpdateAd(scanner, users);
-                        case 7 -> UserService.deleteUser(scanner, users, ads);
+                        case 7 -> UserService.adminDeleteAccount(scanner, users);
                         case 8 -> AdService.adminDeleteAd(scanner, users);
                         case 9 -> {
                             System.out.println(TerminalColor.YELLOW + "\nDéconnexion..." + TerminalColor.RESET);

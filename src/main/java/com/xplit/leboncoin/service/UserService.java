@@ -31,6 +31,7 @@ public class UserService {
         for (int i = 0; i < 40; i++) {
             System.out.println('\n');
         }
+
         System.out.println(TerminalColor.YELLOW + "\nListe des utilisateurs :" + TerminalColor.RESET);
         for (User user : users) {
             System.out.println("\n====================================================================================");
@@ -72,31 +73,24 @@ public class UserService {
         }
     }
 
-    public static void updateUser(Scanner scanner, List<User> users, List<Ad> ads) {
-        updateUserInternal(scanner, users, null, ads, true);
+    public static void adminUpdateProfile(Scanner scanner, List<User> users) {
+        String prompt = "Quel utilisateur souhaitez-vous modifier ? : ";
+        int index = listAndSelectUser(scanner, users, prompt);
+        User selectedUser = users.get(index);
+        User userCopy = new User(selectedUser);
+
+        updateProfileInternal(scanner, users, selectedUser, userCopy, index, true);
     }
 
-    public static void updateUser(Scanner scanner, User selectedUser) {
-        updateUserInternal(scanner, null, selectedUser, null, false);
+    public static void userUpdateProfile(Scanner scanner, User selectedUser) {
+        User userCopy = new User(selectedUser);
+
+        updateProfileInternal(scanner, null, selectedUser, userCopy, null, false);
     }
 
-    private static void updateUserInternal(Scanner scanner, List<User> users, User selectedUser, List<Ad> ads, boolean isAdmin) {
-        User originalUser;
-        User userCopy;
-        int index = -1;
-
-        if (isAdmin) {
-            String prompt = "Quel utilisateur souhaitez-vous modifier ? : ";
-            index = listAndSelectUser(scanner, users, prompt);
-            originalUser = users.get(index);
-            userCopy = new User(originalUser);
-        } else {
-            originalUser = selectedUser;
-            userCopy = new User(selectedUser);
-        }
-
+    private static void updateProfileInternal(Scanner scanner, List<User> users, User selectedUser, User userCopy, Integer index, boolean isAdmin) {
         while (true) {
-            System.out.println(TerminalColor.YELLOW + "\nL'utilisateur est :\n" + TerminalColor.RESET + originalUser);
+            System.out.println(TerminalColor.YELLOW + "\nL'utilisateur est :\n" + TerminalColor.RESET + selectedUser);
             if (isAdmin) {
                 printAdminMenu();
             } else {
@@ -112,8 +106,8 @@ public class UserService {
 
                 if ((isAdmin && input >= 1 && input <= 8) || (!isAdmin && input >= 1 && input <= 7)) {
                     if (isAdmin && input == 1) {
-                        newId(scanner, originalUser, ads);
-                        if (originalUser.getId().equals(userCopy.getId())) {
+                        boolean isModify = newId(scanner, selectedUser);
+                        if (!isModify) {
                             System.out.println(TerminalColor.YELLOW + "\nAucun changement appliqué" + TerminalColor.RESET);
                         } else {
                             System.out.println(TerminalColor.GREEN + "\nUtilisateur modifié avec succès" + TerminalColor.RESET);
@@ -163,7 +157,7 @@ public class UserService {
                 8. Région\
 
                 9. Quitter\
-                            
+                                
 
                 Votre choix :\s""");
     }
@@ -187,12 +181,12 @@ public class UserService {
                 7. Région\
 
                 8. Quitter\
-                            
+
 
                 Votre choix :\s""");
     }
 
-    private static void newId(Scanner scanner, User originalUser, List<Ad> ads) {
+    private static boolean newId(Scanner scanner, User selectedUser) {
         System.out.println("\nPour des raisons de sécurité, l'ID ne peut pas être modifié.\nVoulez-vous en générer un nouveau à la place ?\n1. Oui\n2. Non");
         while (true) {
             System.out.print("Votre choix : ");
@@ -202,17 +196,15 @@ public class UserService {
                 if (choice == 1 || choice == 2) {
                     if (choice == 1) {
                         UUID newId = UUID.randomUUID();
-                        UUID idToSearch = originalUser.getId();
+                        selectedUser.setId(newId);
 
-                        originalUser.setId(newId);
-
-                        for (Ad ad : ads) {
-                            if (ad.getOwner().equals(idToSearch)) {
-                                ad.setOwner(newId);
-                            }
+                        for (Ad ad : selectedUser.getAds()) {
+                            ad.setOwner(newId);
                         }
+                        return true;
+                    } else {
+                        return false;
                     }
-                    break;
                 } else {
                     System.out.println(TerminalColor.RED + "Veuillez entrer 1 ou 2" + TerminalColor.RESET);
                 }
@@ -261,26 +253,20 @@ public class UserService {
         }
     }
 
-    public static void deleteUser(Scanner scanner, List<User> users, List<Ad> ads, User selectedUser) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId().equals(selectedUser.getId())) {
-                deleteUserInternal(scanner, users, ads, i, selectedUser);
-                return;
-            }
-        }
+    public static void userDeleteAccount(Scanner scanner, List<User> users, int index) {
+        deleteUserInternal(scanner, users, index); // This is useless, but it's here to render the code more readable
     }
 
-    public static void deleteUser(Scanner scanner, List<User> users, List<Ad> ads) {
+    public static void adminDeleteAccount(Scanner scanner, List<User> users) {
         String prompt = "Quel utilisateur souhaitez-vous supprimer ? : ";
         int index = listAndSelectUser(scanner, users, prompt);
 
-        User userToDelete = users.get(index);
-        System.out.println(TerminalColor.YELLOW + "\nL'utilisateur sélectionné est :\n" + TerminalColor.RESET + userToDelete);
-        deleteUserInternal(scanner, users, ads, index, userToDelete);
+        deleteUserInternal(scanner, users, index);
     }
 
-    public static void deleteUserInternal(Scanner scanner, List<User> users, List<Ad> ads, int index, User userToDelete) {
+    public static void deleteUserInternal(Scanner scanner, List<User> users, int index) {
         System.out.println("\nVoulez-vous vraiment supprimer ce compte et toutes les annonces qui lui sont associée(s) ?\n1. Oui\n2. Non");
+
         while (true) {
             System.out.print("Votre choix : ");
             String input = scanner.nextLine();
@@ -289,8 +275,7 @@ public class UserService {
                 if (choice == 1 || choice == 2) {
                     if (choice == 1) {
                         users.remove(index);
-                        ads.removeIf(ad -> ad.getOwner().equals(userToDelete.getId()));
-                        System.out.println(TerminalColor.GREEN + "\nUtilisateur supprimé avec succès\n" + TerminalColor.RESET);
+                        System.out.println(TerminalColor.GREEN + "\nUtilisateur supprimé avec succès" + TerminalColor.RESET);
                     } else {
                         System.out.println(TerminalColor.RED + "\nSuppression annulée\n" + TerminalColor.RESET);
                     }
@@ -305,7 +290,6 @@ public class UserService {
     }
 
     public static int listAndSelectUser(Scanner scanner, List<User> users, String prompt) {
-        int userIndex;
         boolean repetition = true;
 
         while (true) {
@@ -322,10 +306,11 @@ public class UserService {
 
             System.out.print('\n' + prompt);
             String input = scanner.nextLine();
+
             try {
-                userIndex = Integer.parseInt(input) - 1;
-                if (userIndex >= 0 && userIndex < users.size()) {
-                    break;
+                int userIndex = Integer.parseInt(input);
+                if (userIndex >= 1 && userIndex <= users.size()) {
+                    return userIndex - 1;
                 } else {
                     System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre de la liste des utilisateurs" + TerminalColor.RESET);
                 }
@@ -333,7 +318,6 @@ public class UserService {
                 System.out.println(TerminalColor.RED + "\nVeuillez entrer un nombre entier" + TerminalColor.RESET);
             }
         }
-        return userIndex;
     }
 
 }

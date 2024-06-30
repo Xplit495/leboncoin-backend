@@ -117,8 +117,7 @@ public class User {
         return ads;
     }
 
-    //Methods
-
+    // Methods
     public void addAd(Ad ad) {
         this.ads.add(ad);
     }
@@ -166,7 +165,6 @@ public class User {
     }
 
     // Validation methods
-
     public void isValidUser() throws InvalidUserInformations {
         isValidFirstName();
         isValidLastName();
