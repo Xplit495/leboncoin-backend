@@ -2,9 +2,9 @@ package com.xplit.leboncoin;
 
 import com.xplit.leboncoin.authorization.AdminMode;
 import com.xplit.leboncoin.authorization.UserMode;
+import com.xplit.leboncoin.internal.internalUser.UtilUser;
 import com.xplit.leboncoin.model.Ad;
 import com.xplit.leboncoin.model.User;
-import com.xplit.leboncoin.service.UserService;
 import com.xplit.leboncoin.util.DataInitializer;
 import com.xplit.leboncoin.util.TerminalColor;
 
@@ -28,7 +28,7 @@ public class Application {
         try {
             List<User> users = DataInitializer.initializeUsers("src/main/resources/users.json");
             List<Ad> ads = DataInitializer.initializeAds("src/main/resources/ads.json", users);
-            UserService.assignAdsToUser(users, ads);
+            UtilUser.assignAdsToUser(users, ads);
 
             Scanner scanner = new Scanner(System.in);
 

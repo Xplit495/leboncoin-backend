@@ -1,8 +1,10 @@
 package com.xplit.leboncoin.authorization;
 
+import com.xplit.leboncoin.internal.internalUser.UtilUser;
 import com.xplit.leboncoin.model.User;
-import com.xplit.leboncoin.service.AdService;
-import com.xplit.leboncoin.service.UserService;
+import com.xplit.leboncoin.internal.internalAd.UtilAd;
+import com.xplit.leboncoin.service.user.UserAdService;
+import com.xplit.leboncoin.service.user.UserService;
 import com.xplit.leboncoin.util.TerminalColor;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Scanner;
 public class UserMode {
     public static void runUser(Scanner scanner, List<User> users) {
         String prompt = "Avec quel utilisateur souhaitez-vous vous connecter : ";
-        int index = UserService.listAndSelectUser(scanner, users, prompt);
+        int index = UtilUser.fetchAndChooseUser(scanner, users, prompt);
 
         User selectedUser = users.get(index);
 
@@ -43,11 +45,11 @@ public class UserMode {
                 input = Integer.parseInt(scanner.nextLine());
                 if (input >= 1 && input <= 8) {
                     switch (input) {
-                        case 1 -> AdService.showAds(users);
-                        case 2 -> AdService.showSelectedUserAds(selectedUser);
-                        case 3 -> AdService.userCreateAd(scanner, selectedUser);
-                        case 4 -> AdService.userUpdateAd(scanner, selectedUser);
-                        case 5 -> AdService.userDeleteAd(scanner, selectedUser);
+                        case 1 -> UtilAd.showAds(users);
+                        case 2 -> UtilAd.showSelectedUserAds(selectedUser);
+                        case 3 -> UserAdService.userCreateAd(scanner, selectedUser);
+                        case 4 -> UserAdService.userUpdateAd(scanner, selectedUser);
+                        case 5 -> UserAdService.userDeleteAd(scanner, selectedUser);
                         case 6 -> UserService.userUpdateProfile(scanner, selectedUser);
                         case 7 -> {
                             UserService.userDeleteAccount(scanner, users, index);
