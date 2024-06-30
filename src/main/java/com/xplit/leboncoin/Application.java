@@ -36,12 +36,9 @@ public class Application {
                 int input;
                 System.out.print("""
 
-                        1. Mode administrateur\
-
-                        2. Mode utilisateur\
-
-                        3. Quitter\
-
+                        1. Mode administrateur
+                        2. Mode utilisateur
+                        3. Quitter
 
                         Votre choix :\s""");
 

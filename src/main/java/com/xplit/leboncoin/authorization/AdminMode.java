@@ -22,24 +22,15 @@ public class AdminMode {
             int input;
             System.out.print("""
 
-                    1. Voir les utilisateurs\
-
-                    2. Voir les annonces\
-
-                    3. Créer un utilisateur\
-
-                    4. Créer une annonce\
-
-                    5. Modifier un profil\
-
-                    6. Modifier une annonce\
-
-                    7. Supprimer un compte\
-
-                    8. Supprimer une annonce\
-
-                    9. Se déconnecter\
-
+                    1. Voir les utilisateurs
+                    2. Voir les annonces
+                    3. Créer un utilisateur
+                    4. Créer une annonce
+                    5. Modifier un profil
+                    6. Modifier une annonce
+                    7. Supprimer un compte
+                    8. Supprimer une annonce
+                    9. Se déconnecter
 
                     Votre choix :\s""");
 

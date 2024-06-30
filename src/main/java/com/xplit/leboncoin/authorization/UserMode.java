@@ -28,22 +28,14 @@ public class UserMode {
             int input;
             System.out.print("""
 
-                    1. Voir les annonces\
-
-                    2. Voir vos annonces\
-
-                    3. Créer une annonce\
-
-                    4. Modifier une annonce\
-
-                    5. Supprimer une annonce\
-
-                    6. Modifier votre profil\
-
-                    7. Supprimer votre compte\
-
-                    8. Se déconnecter\
-
+                    1. Voir les annonces
+                    2. Voir vos annonces
+                    3. Créer une annonce
+                    4. Modifier une annonce
+                    5. Supprimer une annonce
+                    6. Modifier votre profil
+                    7. Supprimer votre compte
+                    8. Se déconnecter
 
                     Votre choix :\s""");
             try {
